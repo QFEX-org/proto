@@ -1,0 +1,121 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package common;
+
+message Empty {}
+
+enum OrderType {
+    LIMIT = 0;                   // Limit order
+    MARKET = 1;                  // Market order
+}
+
+enum OrderDirection {
+    BUY = 0;                      // Buy order
+    SELL = 1;                     // Sell order
+}
+
+enum OrderTimeInForce {
+    GFD = 0;                      // Good till canceled
+    IOC = 1;                      // Immediate or cancel
+    // FOK = 2;                      // Fill or kill
+}
+
+enum OrderAction {
+    ADD = 0;
+    MODIFY = 1;
+    DELETE = 2;
+}
+
+enum OrderStatus {
+    NEW = 0;
+    EXPIRED = 6;
+    IOC_CANCELLED = 7;
+    INVALID_PRICE = 8;
+    INVALID_QUANTITY = 9;
+    NOT_FOUND = 10;
+    IOC_PARTIALLY_FILLED = 11;
+    USER_NOT_FOUND = 12;
+    PERMISSION_DENIED = 13;
+    
+    // New ENUM values for new and improved
+    // Anything above here and not here is on the way out.
+    FILLED = 2;
+    MODIFIED = 20;
+    CANCELLED = 30;
+
+    REJECTED = 50;
+    NO_SUCH_ORDER = 52;
+    INVALID_ORDER_TYPE = 53;
+    BAD_SYMBOL = 54;
+    PRICE_LESS_THAN_MIN_PRICE = 55;
+    PRICE_GREATER_THAN_MAX_PRICE = 56;
+    INVALID_TICK_SIZE_PRECISION = 57;
+    CANNOT_MODIFY_PARTIAL_FILL = 58;
+    FAILED_MARGIN_CHECK = 60;
+    REJECTED_MUST_CHANGE_VALUE_MODIFY = 61;
+    NO_CHANGE_NO_UPDATE = 62;
+
+    RATE_LIMITED = 97;
+    ACK = 98;
+}
+
+message AckResponse {
+    bool success = 1;
+    google.protobuf.Timestamp timestamp = 2;
+}
+
+message ListRequest {
+    int32 limit = 1;
+    int32 offset = 2;
+}
+
+message TradePublic {
+    string trade_id = 1;
+    string symbol = 2;
+    int64 price = 3;
+    int64 quantity = 4;
+    google.protobuf.Timestamp order_timestamp = 5;
+
+    common.OrderDirection aggressor_side = 6;
+    string buy_order_id = 8;
+    string sell_order_id = 9;
+    string buy_user_id = 10;
+    string sell_user_id = 11;
+}
+
+message TradesPublic {
+    repeated TradePublic trades = 1;
+    google.protobuf.Timestamp timestamp = 2;
+    int32 count = 3;
+}
+
+message UserRequest {
+    string user_id = 1;
+}
+
+message OrderBookEntry {
+    int64 price = 1;
+    int64 quantity = 2;
+}
+
+message OrderBook {
+    string symbol = 1;
+    google.protobuf.Timestamp timestamp = 2;
+    repeated OrderBookEntry bids = 3;
+    repeated OrderBookEntry asks = 4;
+    int64 last_traded_price = 5;
+    int64 sequence = 6;
+}
+
+message BalancePublic {
+    string id = 1;
+    string user_id = 2;
+    int64 deposit = 3;
+    int64 realised_pnl = 4;
+    int64 order_margin = 5;
+    int64 position_margin = 6;
+    int64 unrealised_pnl = 7;
+    google.protobuf.Timestamp timestamp = 99;
+  }
