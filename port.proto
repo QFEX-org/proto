@@ -13,7 +13,6 @@ service PortService {
     rpc GetOrders (common.ListRequest) returns (AllOrdersResponse);
     rpc CancelAllOrders (common.Empty) returns (common.AckResponse);
 
-    rpc GetTrades(common.ListRequest) returns (TradesPublic);
     rpc GetUserTrades(common.ListRequest) returns (TradesPublic);
 
     rpc GetUserPositions(common.Empty) returns (PositionsPublic);
