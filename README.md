@@ -9,6 +9,7 @@ python -m grpc_tools.protoc -I. --python_out=./examples --grpc_python_out=./exam
 ```
 
 # Run script
+Ensure you have [uv](https://docs.astral.sh/uv/guides/install-python/) python package manager installed
 ```
 uv run examples/market_data_order_book.py
 ```
