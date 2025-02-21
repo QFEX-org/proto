@@ -53,6 +53,8 @@ async def run():
             response = await orders_stream.read()
             print(response)
 
+            await asyncio.sleep(0.01)
+
 
 if __name__ == "__main__":
     logging.basicConfig()
