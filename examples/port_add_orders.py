@@ -18,9 +18,9 @@ import logging
 import random
 import grpc.aio
 
-import proto.common_pb2 as common_pb2
-import proto.port_pb2 as port_pb2
-import proto.port_pb2_grpc as port_pb2_grpc
+import common_pb2 as common_pb2
+import port_pb2 as port_pb2
+import port_pb2_grpc as port_pb2_grpc
 
 
 async def write_orders(orders_stream):
