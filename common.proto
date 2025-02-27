@@ -9,6 +9,7 @@ message Empty {}
 enum OrderType {
     LIMIT = 0;                   // Limit order
     MARKET = 1;                  // Market order
+    LIQUIDATE = 2;
 }
 
 enum OrderDirection {
@@ -23,13 +24,14 @@ enum OrderTimeInForce {
 }
 
 enum OrderAction {
-    ADD = 0;
+    NEW = 0;
     MODIFY = 1;
-    DELETE = 2;
+    CANCEL = 2;
+    FLUSH = 3;
 }
 
 enum OrderStatus {
-    NEW = 0;
+    ACK = 0;
     EXPIRED = 6;
     IOC_CANCELLED = 7;
     INVALID_PRICE = 8;
@@ -51,14 +53,18 @@ enum OrderStatus {
     BAD_SYMBOL = 54;
     PRICE_LESS_THAN_MIN_PRICE = 55;
     PRICE_GREATER_THAN_MAX_PRICE = 56;
-    INVALID_TICK_SIZE_PRECISION = 57;
     CANNOT_MODIFY_PARTIAL_FILL = 58;
     FAILED_MARGIN_CHECK = 60;
     REJECTED_MUST_CHANGE_VALUE_MODIFY = 61;
     NO_CHANGE_NO_UPDATE = 62;
+    INVALID_TICK_SIZE_PRECISION_PRICE = 63;
+    INVALID_TICK_SIZE_PRECISION_QUANTITY = 64;
+    QUANTITY_LESS_THAN_MIN_QUANTITY = 65;
+    QUANTITY_GREATER_THAN_MAX_QUANTITY = 66;
+    REJECTED_GREATER_THAN_MAX_PRICE_BAND = 67;
+    REJECTED_LESS_THAN_MIN_PRICE_BAND = 68;
 
     RATE_LIMITED = 97;
-    ACK = 98;
 }
 
 message AckResponse {
@@ -96,8 +102,8 @@ message UserRequest {
 }
 
 message OrderBookEntry {
-    int64 price = 1;
-    int64 quantity = 2;
+    uint64 price = 1;
+    uint64 quantity = 2;
 }
 
 message OrderBook {
@@ -105,8 +111,8 @@ message OrderBook {
     google.protobuf.Timestamp timestamp = 2;
     repeated OrderBookEntry bids = 3;
     repeated OrderBookEntry asks = 4;
-    int64 last_traded_price = 5;
-    int64 sequence = 6;
+    uint64 last_traded_price = 5;
+    uint64 sequence = 6;
 }
 
 message BalancePublic {
@@ -117,5 +123,50 @@ message BalancePublic {
     int64 order_margin = 5;
     int64 position_margin = 6;
     int64 unrealised_pnl = 7;
+    bool is_institution = 8;
+    google.protobuf.Timestamp timestamp = 99;
+  }
+
+  message AppendOrderRequest {
+    string order_id = 1;
+    string symbol = 2;
+    common.OrderDirection side = 3;
+    common.OrderType type = 4;
+    common.OrderTimeInForce time_in_force = 5;
+    common.OrderAction order_action = 6; // NEW/CANCEL/
+    uint64 quantity = 7;
+    uint64 price = 8;
+    string user_id = 10;
+    optional uint64 old_quantity = 11;
+    optional uint64 old_price = 12;
+    string client_order_id = 13;
+    uint64 passive_qty = 14;
+
+    
+    string correlation_id = 98;
+    google.protobuf.Timestamp timestamp = 99;
+  
+  }
+  
+  message AppendTradeRequest {
+    string trade_id = 1;
+    string symbol = 2;
+    common.OrderDirection aggressor_side = 3;
+    string buy_user_id = 4;
+    string sell_user_id = 5;
+    string buy_order_id = 6;
+    string sell_order_id = 7;
+    uint64 buy_fee = 8;
+    uint64 sell_fee = 9;
+    uint64 quantity = 12;
+    uint64 price = 13;
+    common.OrderTimeInForce buyer_time_in_force = 14;
+    uint64 buyer_order_price = 15;
+    common.OrderTimeInForce seller_time_in_force = 16;
+    uint64 seller_order_price = 17;
+    string buy_client_order_id = 18;
+    string sell_client_order_id = 19;
+
+    string correlation_id = 98;
     google.protobuf.Timestamp timestamp = 99;
   }

@@ -8,11 +8,19 @@ package port;
 service PortService {
     rpc StreamOrders (stream OrdersStreamRequest) returns (stream OrderResponse);
 
+    rpc AddOrder (AddOrderRequest) returns (OrderResponse);
+    rpc CancelOrder (CancelOrderRequest) returns (OrderResponse);
+    rpc ModifyOrder (ModifyOrderRequest) returns (OrderResponse);
     rpc GetOrder (GetOrderRequest) returns (OrderResponse);
     rpc GetUserOrders (common.ListRequest) returns (AllOrdersResponse);
     rpc GetOrders (common.ListRequest) returns (AllOrdersResponse);
     rpc CancelAllOrders (common.Empty) returns (common.AckResponse);
 
+    rpc GetOrderBook (GetOrderBookRequest) returns (stream OrderBook);
+    rpc SubscribeTrades(common.Empty) returns (stream MatchedTrades);
+    rpc ReloadUsers(common.Empty) returns (common.AckResponse);
+
+    rpc GetTrades(common.ListRequest) returns (TradesPublic);
     rpc GetUserTrades(common.ListRequest) returns (TradesPublic);
 
     rpc GetUserPositions(common.Empty) returns (PositionsPublic);
@@ -106,6 +114,7 @@ message OrderResponse {
     google.protobuf.Timestamp update_time = 10;
     string user_id = 11;
     string client_order_id = 12;
+    double quantity_remaining = 13;
 }
 
 message AllOrdersResponse {
