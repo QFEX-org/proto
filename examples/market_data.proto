@@ -45,13 +45,15 @@ message Underlier {
     string symbol = 1;
     double price = 2;
     
+    uint64 sequence = 98;
     google.protobuf.Timestamp timestamp = 99;
-  }
+}
 
-  message FundingRate {
+message FundingRate {
     string symbol = 1;
     double rate = 2;
     uint64 time_remaining_seconds = 3;
     
+    uint64 sequence = 98;
     google.protobuf.Timestamp timestamp = 99;
-  }
+}

@@ -61,8 +61,6 @@ enum OrderStatus {
     INVALID_TICK_SIZE_PRECISION_QUANTITY = 64;
     QUANTITY_LESS_THAN_MIN_QUANTITY = 65;
     QUANTITY_GREATER_THAN_MAX_QUANTITY = 66;
-    REJECTED_GREATER_THAN_MAX_PRICE_BAND = 67;
-    REJECTED_LESS_THAN_MIN_PRICE_BAND = 68;
 
     RATE_LIMITED = 97;
 }
@@ -124,6 +122,8 @@ message BalancePublic {
     int64 position_margin = 6;
     int64 unrealised_pnl = 7;
     bool is_institution = 8;
+
+    google.protobuf.Timestamp last_updated = 98;
     google.protobuf.Timestamp timestamp = 99;
   }
 
@@ -166,7 +166,22 @@ message BalancePublic {
     uint64 seller_order_price = 17;
     string buy_client_order_id = 18;
     string sell_client_order_id = 19;
-
+    
     string correlation_id = 98;
+    google.protobuf.Timestamp timestamp = 99;
+  }
+
+  message Underlier {
+    string symbol = 1;
+    uint64 price = 2;
+    
+    google.protobuf.Timestamp timestamp = 99;
+  }
+
+  message FundingRate {
+    string symbol = 1;
+    int64 rate = 2;
+    uint64 time_remaining_seconds = 3;
+    
     google.protobuf.Timestamp timestamp = 99;
   }

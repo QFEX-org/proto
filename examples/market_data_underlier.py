@@ -14,7 +14,7 @@ import market_data_pb2_grpc as market_data_pb2_grpc
 TO RUN THIS FILE:
 
 1. cd into parent directory
-2. uv run examples/market_data_order_book.py
+2. uv run examples/market_data_trades.py
 """
 
 
@@ -28,7 +28,7 @@ def run():
     stub = market_data_pb2_grpc.MarketDataServiceStub(channel)
 
     request = market_data_pb2.GetSymbol(symbol="AAPL")
-    for response in stub.GetOrderBook(request):
+    for response in stub.GetUnderlier(request):
         print(f"Received data: {response}")
 
 
