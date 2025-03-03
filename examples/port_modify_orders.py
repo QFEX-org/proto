@@ -27,20 +27,18 @@ async def write_orders(orders_stream):
     """Continuously write orders to the stream."""
     while True:
         request_buy = port_pb2.OrdersStreamRequest(
-            add_order=port_pb2.AddOrderRequest(
-                symbol="SPY-USD",
-                side=random.choice(
-                    [common_pb2.OrderDirection.BUY, common_pb2.OrderDirection.SELL]
-                ),
-                type=common_pb2.OrderType.LIMIT,
-                time_in_force=common_pb2.OrderTimeInForce.GFD,
-                quantity=random.randint(10, 100),
-                price=random.randint(450, 550),
+            modify_order=port_pb2.ModifyOrderRequest(
+                symbol="AAPL-USD",
+                order_id="bf4c70b8-6f79-4db6-bc26-dc6a0f63335c",
+                original_quantity=100,
+                quantity=100,
+                price=200,
                 timestamp=datetime.now(),
+                update_time=datetime.now(),
             )
         )
-        # print(request_buy)
         await orders_stream.write(request_buy)
+        return
         # Pause briefly before sending the next order
         await asyncio.sleep(0.01)
 
@@ -58,14 +56,14 @@ async def read_responses(orders_stream):
 
 async def run():
     # Define your API key
-    api_key_1 = "00000000-0000-4000-a000-000000000000"
+    api_key_1 = "00000000-0000-4000-a000-000000000001"
 
     # Prepare metadata with the API key (used for authentication)
     metadata = (("api-key", api_key_1),)
 
     print("Connecting to server...")
     # Create secure channel credentials (defaults are used here)
-    async_channel = grpc.aio.insecure_channel("trade.psex.io:50051")
+    async_channel = grpc.aio.insecure_channel("trade.psex.io:50051", creds)
     # async_channel = grpc.aio.insecure_channel("localhost:50052")
 
     async with async_channel as channel:
