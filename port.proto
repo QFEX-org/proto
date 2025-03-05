@@ -8,16 +8,43 @@ package port;
 service PortService {
     rpc StreamOrders (stream OrdersStreamRequest) returns (stream OrderResponse);
 
+    rpc GetOrder (GetOrderRequest) returns (OrderResponse);
     rpc GetUserOrders (common.ListRequest) returns (AllOrdersResponse);
     rpc CancelAllOrders (common.Empty) returns (common.AckResponse);
 
-    rpc GetTrades(common.ListRequest) returns (TradesPublic);
-    rpc GetUserTrades(common.ListRequest) returns (TradesPublic);
+    rpc ReloadUsers(common.Empty) returns (common.AckResponse);
 
+    rpc GetUserTrades(common.ListRequest) returns (TradesPublic);
     rpc GetUserPositions(common.Empty) returns (PositionsPublic);
     rpc GetUserBalance(common.Empty) returns (BalancePublic);
 }
 
+
+message GetOrderBookRequest {
+    string symbol = 1;
+}
+
+message OrderBook {
+    string symbol = 1;
+    google.protobuf.Timestamp timestamp = 2;
+    repeated OrderBookEntry bids = 3;
+    repeated OrderBookEntry asks = 4;
+    int64 sequence = 5;
+}
+
+message OrderBookEntry {
+    double price = 1;
+    double quantity = 2;
+}
+
+message MatchedTrades {
+    string symbol = 1;                  // Trading pair, e.g., "BTCUSDT"
+    double price = 2;                   // Matched price (agressor's price)
+    double quantity = 3;                 // Matched quantity
+    common.OrderDirection aggressor_side = 4;  // Aggressor's side
+    string maker_order_id = 5;          // Maker's order ID
+    string taker_order_id = 6;          // Taker's order ID
+}
 
 
 message AddOrderRequest {
@@ -64,7 +91,6 @@ enum OrderRespType {
     ACK = 0;
     RESULT = 1;
 }
-
 
 
 message OrderResponse {

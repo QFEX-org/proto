@@ -61,6 +61,8 @@ enum OrderStatus {
     INVALID_TICK_SIZE_PRECISION_QUANTITY = 64;
     QUANTITY_LESS_THAN_MIN_QUANTITY = 65;
     QUANTITY_GREATER_THAN_MAX_QUANTITY = 66;
+    REJECTED_GREATER_THAN_MAX_PRICE_BAND = 67;
+    REJECTED_LESS_THAN_MIN_PRICE_BAND = 68;
 
     RATE_LIMITED = 97;
 }
@@ -125,9 +127,9 @@ message BalancePublic {
 
     google.protobuf.Timestamp last_updated = 98;
     google.protobuf.Timestamp timestamp = 99;
-  }
+}
 
-  message AppendOrderRequest {
+message AppendOrderRequest {
     string order_id = 1;
     string symbol = 2;
     common.OrderDirection side = 3;
@@ -145,10 +147,9 @@ message BalancePublic {
     
     string correlation_id = 98;
     google.protobuf.Timestamp timestamp = 99;
+}
   
-  }
-  
-  message AppendTradeRequest {
+message AppendTradeRequest {
     string trade_id = 1;
     string symbol = 2;
     common.OrderDirection aggressor_side = 3;
@@ -171,17 +172,23 @@ message BalancePublic {
     google.protobuf.Timestamp timestamp = 99;
   }
 
-  message Underlier {
+message Underlier {
     string symbol = 1;
     uint64 price = 2;
     
     google.protobuf.Timestamp timestamp = 99;
-  }
+}
 
-  message FundingRate {
+message FundingRate {
     string symbol = 1;
     int64 rate = 2;
     uint64 time_remaining_seconds = 3;
     
     google.protobuf.Timestamp timestamp = 99;
-  }
+}
+
+enum SymbolStatus {
+    ACTIVE = 0;
+    INACTIVE = 1;
+    DELISTED = 2;
+}

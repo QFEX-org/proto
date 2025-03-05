@@ -11,6 +11,8 @@ service MarketDataService {
     rpc GetTrades(GetSymbol) returns (stream Trade);
     rpc GetUnderlier(GetSymbol) returns (stream Underlier);
     rpc GetFundingRate(GetSymbol) returns (stream FundingRate);
+
+    rpc GetRefData(common.Empty) returns (RefData);
 }
 
 
@@ -46,12 +48,42 @@ message Underlier {
     double price = 2;
     
     google.protobuf.Timestamp timestamp = 99;
-  }
+}
 
-  message FundingRate {
+message FundingRate {
     string symbol = 1;
     double rate = 2;
     uint64 time_remaining_seconds = 3;
-    
+
     google.protobuf.Timestamp timestamp = 99;
-  }
+}
+
+message SymbolRefData {
+string clobPairId = 1;
+    string symbol = 2;
+    common.SymbolStatus status = 3;
+    double underlier_price = 4;
+    double price_change_24h = 5;
+    double volume_24h = 6;
+    double trades_24h = 7;
+    double next_funding_rate = 8;
+    double initial_margin_fraction = 9;
+    double maintenance_margin_fraction = 10;
+    float tick_size = 11;
+    float lot_size = 12;
+    float min_price = 13;
+    float max_price = 14;
+    float min_quantity = 15;
+    float max_quantity = 16;
+
+    string base_asset = 17;
+    string quote_asset = 18;
+    string margin_asset = 19;
+    repeated common.OrderTimeInForce order_time_in_force = 20;
+    repeated common.OrderType order_types = 21;
+}
+
+message RefData {
+    repeated SymbolRefData symbols = 1;
+    google.protobuf.Timestamp timestamp = 99;
+}
