@@ -32,6 +32,7 @@ async def write_orders(orders_stream):
                 side=random.choice(
                     [common_pb2.OrderDirection.BUY, common_pb2.OrderDirection.SELL]
                 ),
+                # side=common_pb2.OrderDirection.BUY,
                 type=common_pb2.OrderType.LIMIT,
                 time_in_force=common_pb2.OrderTimeInForce.GFD,
                 quantity=random.randint(1, 100),
@@ -39,9 +40,10 @@ async def write_orders(orders_stream):
                 timestamp=datetime.now(),
             )
         )
+        # print(request_buy)
         await orders_stream.write(request_buy)
         # Pause briefly before sending the next order
-        await asyncio.sleep(0.01)
+        await asyncio.sleep(0.001)
 
 
 async def read_responses(orders_stream):
@@ -64,8 +66,7 @@ async def run():
 
     print("Connecting to server...")
     # Create secure channel credentials (defaults are used here)
-    creds = grpc.ssl_channel_credentials()
-    async_channel = grpc.aio.secure_channel("trade.psex.io:443", creds)
+    async_channel = grpc.insecure_channel("mds.psex.io:50051")
 
     async with async_channel as channel:
         stub = port_pb2_grpc.PortServiceStub(channel)

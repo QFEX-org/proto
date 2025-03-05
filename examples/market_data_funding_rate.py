@@ -22,7 +22,7 @@ def run():
     creds = grpc.ssl_channel_credentials(
         root_certificates=None, private_key=None, certificate_chain=None
     )
-    channel = grpc.secure_channel("mds.psex.io:443", creds)
+    channel = grpc.insecure_channel("mds.psex.io:50051")
 
     stub = market_data_pb2_grpc.MarketDataServiceStub(channel)
 
