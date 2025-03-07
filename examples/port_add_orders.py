@@ -66,7 +66,7 @@ async def run():
 
     print("Connecting to server...")
     # Create secure channel credentials (defaults are used here)
-    async_channel = grpc.insecure_channel("mds.psex.io:50051")
+    async_channel = grpc.aio.insecure_channel("trade.psex.io:50051")
 
     async with async_channel as channel:
         stub = port_pb2_grpc.PortServiceStub(channel)
