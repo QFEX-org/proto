@@ -10,6 +10,7 @@ enum OrderType {
     LIMIT = 0;                   // Limit order
     MARKET = 1;                  // Market order
     LIQUIDATE = 2;
+    ALO = 3;
 }
 
 enum OrderDirection {
@@ -20,7 +21,7 @@ enum OrderDirection {
 enum OrderTimeInForce {
     GFD = 0;                      // Good till canceled
     IOC = 1;                      // Immediate or cancel
-    // FOK = 2;                      // Fill or kill
+    FOK = 2;                      // Fill or kill
 }
 
 enum OrderAction {
@@ -46,6 +47,7 @@ enum OrderStatus {
     FILLED = 2;
     MODIFIED = 20;
     CANCELLED = 30;
+    CANCELLED_STP = 31;
 
     REJECTED = 50;
     NO_SUCH_ORDER = 52;
@@ -63,6 +65,7 @@ enum OrderStatus {
     QUANTITY_GREATER_THAN_MAX_QUANTITY = 66;
     REJECTED_GREATER_THAN_MAX_PRICE_BAND = 67;
     REJECTED_LESS_THAN_MIN_PRICE_BAND = 68;
+    INVALID_TIME_IN_FORCE = 69;
 
     RATE_LIMITED = 97;
 }
@@ -89,6 +92,8 @@ message TradePublic {
     string sell_order_id = 9;
     string buy_user_id = 10;
     string sell_user_id = 11;
+    int64 buy_fee = 12;
+    int64 sell_fee = 13;
 }
 
 message TradesPublic {
@@ -123,7 +128,9 @@ message BalancePublic {
     int64 order_margin = 5;
     int64 position_margin = 6;
     int64 unrealised_pnl = 7;
-    bool is_institution = 8;
+    int64 available_balance = 8;
+
+    bool is_institution = 50;
 
     google.protobuf.Timestamp last_updated = 98;
     google.protobuf.Timestamp timestamp = 99;
