@@ -26,7 +26,7 @@ def run():
 
     stub = market_data_pb2_grpc.MarketDataServiceStub(channel)
 
-    request = market_data_pb2.GetSymbol(symbol="AAPL")
+    request = market_data_pb2.GetSymbol(symbol="AAPL-USD")
     for response in stub.GetTrades(request):
         print(f"Received data: {response}")
 

@@ -28,22 +28,21 @@ async def write_orders(orders_stream):
     while True:
         request_buy = port_pb2.OrdersStreamRequest(
             add_order=port_pb2.AddOrderRequest(
-                symbol="AAPL",
+                symbol="SPY-USD",
                 side=random.choice(
                     [common_pb2.OrderDirection.BUY, common_pb2.OrderDirection.SELL]
                 ),
-                # side=common_pb2.OrderDirection.BUY,
                 type=common_pb2.OrderType.LIMIT,
                 time_in_force=common_pb2.OrderTimeInForce.GFD,
-                quantity=random.randint(1, 100),
-                price=random.randint(90, 100),
+                quantity=random.randint(10, 100),
+                price=random.randint(450, 550),
                 timestamp=datetime.now(),
             )
         )
         # print(request_buy)
         await orders_stream.write(request_buy)
         # Pause briefly before sending the next order
-        await asyncio.sleep(0.001)
+        await asyncio.sleep(0.01)
 
 
 async def read_responses(orders_stream):

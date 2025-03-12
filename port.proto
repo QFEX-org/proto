@@ -127,6 +127,8 @@ message TradePublic {
     string sell_order_id = 9;
     string buy_user_id = 10;
     string sell_user_id = 11;
+    double buy_fee = 12;
+    double sell_fee = 13;
 }
 
 message TradesPublic {
@@ -145,7 +147,12 @@ message PositionPublic {
     double price_sell = 7;
     double margin_alloc = 8;
     double realised_pnl = 9;
-    google.protobuf.Timestamp timestamp = 10;
+    double unrealised_pnl = 10;
+    double net_funding = 11;
+
+
+    google.protobuf.Timestamp last_updated = 98;
+    google.protobuf.Timestamp timestamp = 99;
 }
   
 message PositionsPublic {
