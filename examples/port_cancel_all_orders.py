@@ -31,7 +31,8 @@ async def run():
 
     print("Connecting to server...")
     # Create secure channel credentials (defaults are used here)
-    async_channel = grpc.aio.insecure_channel("trade.psex.io:50051")
+    creds = grpc.ssl_channel_credentials()
+    async_channel = grpc.aio.insecure_channel("trade.psex.io:443", creds)
     # async_channel = grpc.aio.insecure_channel("localhost:50052")
 
     async with async_channel as channel:

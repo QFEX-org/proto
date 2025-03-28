@@ -58,15 +58,16 @@ async def read_responses(orders_stream):
 
 async def run():
     # Define your API key
-    api_key_1 = "00000000-0000-4000-a000-000000000000"
+    api_key_1 = "dcc765ce-a0f0-4f4f-9db1-e61c1e826ef0"
 
     # Prepare metadata with the API key (used for authentication)
     metadata = (("api-key", api_key_1),)
 
     print("Connecting to server...")
     # Create secure channel credentials (defaults are used here)
-    async_channel = grpc.aio.insecure_channel("trade.psex.io:50051")
-    # async_channel = grpc.aio.insecure_channel("localhost:50052")
+    creds = grpc.ssl_channel_credentials()
+    async_channel = grpc.aio.secure_channel("trade.psex.io:443", creds)
+    #async_channel = grpc.aio.insecure_channel("localhost:50052")
 
     async with async_channel as channel:
         stub = port_pb2_grpc.PortServiceStub(channel)

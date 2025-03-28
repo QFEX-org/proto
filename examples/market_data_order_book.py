@@ -22,12 +22,12 @@ def run():
     creds = grpc.ssl_channel_credentials(
         root_certificates=None, private_key=None, certificate_chain=None
     )
-    channel = grpc.insecure_channel("mds.psex.io:50051")
-    # channel = grpc.insecure_channel("localhost:50055")
+    #channel = grpc.insecure_channel("mds.psex.io:50051")
+    channel = grpc.secure_channel("mds.psex.io:443", creds)
 
     stub = market_data_pb2_grpc.MarketDataServiceStub(channel)
 
-    request = market_data_pb2.GetSymbol(symbol="SPY-USD")
+    request = market_data_pb2.GetSymbol(symbol="AAPL-USD")
     for response in stub.GetOrderBook(request):
         print(f"Received data: {response}")
 

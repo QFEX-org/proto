@@ -59,7 +59,7 @@ message FundingRate {
 }
 
 message SymbolRefData {
-string clobPairId = 1;
+    string clobPairId = 1;
     string symbol = 2;
     common.SymbolStatus status = 3;
     double underlier_price = 4;

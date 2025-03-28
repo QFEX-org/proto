@@ -24,13 +24,6 @@ enum OrderTimeInForce {
     FOK = 2;                      // Fill or kill
 }
 
-enum OrderAction {
-    NEW = 0;
-    MODIFY = 1;
-    CANCEL = 2;
-    FLUSH = 3;
-}
-
 enum OrderStatus {
     ACK = 0;
     EXPIRED = 6;
@@ -66,6 +59,7 @@ enum OrderStatus {
     REJECTED_GREATER_THAN_MAX_PRICE_BAND = 67;
     REJECTED_LESS_THAN_MIN_PRICE_BAND = 68;
     INVALID_TIME_IN_FORCE = 69;
+    REJECTED_WOULD_BREACH_MAX_POSITION = 70;
 
     RATE_LIMITED = 97;
 }
@@ -129,55 +123,13 @@ message BalancePublic {
     int64 position_margin = 6;
     int64 unrealised_pnl = 7;
     int64 available_balance = 8;
+    int64 net_funding = 9;
 
     bool is_institution = 50;
 
     google.protobuf.Timestamp last_updated = 98;
     google.protobuf.Timestamp timestamp = 99;
 }
-
-message AppendOrderRequest {
-    string order_id = 1;
-    string symbol = 2;
-    common.OrderDirection side = 3;
-    common.OrderType type = 4;
-    common.OrderTimeInForce time_in_force = 5;
-    common.OrderAction order_action = 6; // NEW/CANCEL/
-    uint64 quantity = 7;
-    uint64 price = 8;
-    string user_id = 10;
-    optional uint64 old_quantity = 11;
-    optional uint64 old_price = 12;
-    string client_order_id = 13;
-    uint64 passive_qty = 14;
-
-    
-    string correlation_id = 98;
-    google.protobuf.Timestamp timestamp = 99;
-}
-  
-message AppendTradeRequest {
-    string trade_id = 1;
-    string symbol = 2;
-    common.OrderDirection aggressor_side = 3;
-    string buy_user_id = 4;
-    string sell_user_id = 5;
-    string buy_order_id = 6;
-    string sell_order_id = 7;
-    uint64 buy_fee = 8;
-    uint64 sell_fee = 9;
-    uint64 quantity = 12;
-    uint64 price = 13;
-    common.OrderTimeInForce buyer_time_in_force = 14;
-    uint64 buyer_order_price = 15;
-    common.OrderTimeInForce seller_time_in_force = 16;
-    uint64 seller_order_price = 17;
-    string buy_client_order_id = 18;
-    string sell_client_order_id = 19;
-    
-    string correlation_id = 98;
-    google.protobuf.Timestamp timestamp = 99;
-  }
 
 message Underlier {
     string symbol = 1;
@@ -198,4 +150,24 @@ enum SymbolStatus {
     ACTIVE = 0;
     INACTIVE = 1;
     DELISTED = 2;
+}
+
+message OrderResponse {
+  string order_id = 1;
+  string symbol = 2;
+  common.OrderStatus status = 3;
+  uint64 quantity = 5;
+  uint64 price = 6;
+  common.OrderDirection side = 7;
+  common.OrderType type = 8;
+  common.OrderTimeInForce time_in_force = 9;
+  google.protobuf.Timestamp update_time = 10;
+  string user_id = 11;
+  string client_order_id = 12;
+  uint64 quantity_remaining = 13;
+}
+message AllOrdersResponse {
+    repeated OrderResponse orders = 1;
+    google.protobuf.Timestamp timestamp = 2;
+    int32 count = 3;
 }
