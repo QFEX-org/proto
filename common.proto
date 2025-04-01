@@ -24,6 +24,15 @@ enum OrderTimeInForce {
     FOK = 2;                      // Fill or kill
 }
 
+enum OrderAction {
+    NEW = 0;
+    MODIFY = 1;
+    CANCEL = 2;
+    FLUSH = 3;
+    FILL = 4;
+    INIT = 99;
+}
+
 enum OrderStatus {
     ACK = 0;
     EXPIRED = 6;
@@ -60,6 +69,8 @@ enum OrderStatus {
     REJECTED_LESS_THAN_MIN_PRICE_BAND = 68;
     INVALID_TIME_IN_FORCE = 69;
     REJECTED_WOULD_BREACH_MAX_POSITION = 70;
+    CANNOT_MODIFY_NO_SUCH_ORDER = 71;
+    REJECTED_MARKET_CLOSED = 72;
 
     RATE_LIMITED = 97;
 }
@@ -96,6 +107,7 @@ message TradesPublic {
     int32 count = 3;
 }
 
+
 message UserRequest {
     string user_id = 1;
 }
@@ -127,10 +139,31 @@ message BalancePublic {
 
     bool is_institution = 50;
 
-    google.protobuf.Timestamp last_updated = 98;
     google.protobuf.Timestamp timestamp = 99;
 }
 
+message AppendOrderRequest {
+    string order_id = 1;
+    string symbol = 2;
+    common.OrderDirection side = 3;
+    common.OrderType type = 4;
+    common.OrderTimeInForce time_in_force = 5;
+    optional common.OrderAction order_action = 6; // NEW/CANCEL/
+    uint64 quantity = 7;
+    uint64 price = 8;
+    string user_id = 10;
+    optional uint64 old_quantity = 11;
+    optional uint64 old_price = 12;
+    string client_order_id = 13;
+    uint64 passive_qty = 14;
+    
+    
+    common.OrderStatus order_status = 50;
+    optional bool is_passive = 51;
+    optional string correlation_id = 98;
+    google.protobuf.Timestamp timestamp = 99;
+}
+  
 message Underlier {
     string symbol = 1;
     uint64 price = 2;
@@ -152,22 +185,18 @@ enum SymbolStatus {
     DELISTED = 2;
 }
 
-message OrderResponse {
-  string order_id = 1;
-  string symbol = 2;
-  common.OrderStatus status = 3;
-  uint64 quantity = 5;
-  uint64 price = 6;
-  common.OrderDirection side = 7;
-  common.OrderType type = 8;
-  common.OrderTimeInForce time_in_force = 9;
-  google.protobuf.Timestamp update_time = 10;
-  string user_id = 11;
-  string client_order_id = 12;
-  uint64 quantity_remaining = 13;
-}
+
 message AllOrdersResponse {
-    repeated OrderResponse orders = 1;
+    repeated AppendOrderRequest orders = 1;
     google.protobuf.Timestamp timestamp = 2;
     int32 count = 3;
+}
+
+message TradeVolume {
+    string symbol = 1;
+    int64 trade_amount = 2;
+    int64 trade_volume = 3;
+    int64 price_change = 4;
+
+    google.protobuf.Timestamp timestamp = 99;
 }

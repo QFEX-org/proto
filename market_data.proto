@@ -58,6 +58,23 @@ message FundingRate {
     google.protobuf.Timestamp timestamp = 99;
 }
 
+message DayMarketHours {
+    string open = 1;
+    string close = 2;
+}
+
+message MarketHours {
+    string tz = 1;
+    DayMarketHours monday = 2;
+    DayMarketHours tuesday = 3;
+    DayMarketHours wednesday = 4;
+    DayMarketHours thursday = 5;
+    DayMarketHours friday = 6;
+    DayMarketHours saturday = 7;
+    DayMarketHours sunday = 8;
+}
+
+
 message SymbolRefData {
     string clobPairId = 1;
     string symbol = 2;
@@ -81,6 +98,8 @@ message SymbolRefData {
     string margin_asset = 19;
     repeated common.OrderTimeInForce order_time_in_force = 20;
     repeated common.OrderType order_types = 21;
+    MarketHours market_hours = 22;  // New field for market hours
+
 }
 
 message RefData {

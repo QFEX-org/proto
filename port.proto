@@ -6,21 +6,19 @@ import "common.proto";
 package port;
 
 service PortService {
-    rpc StreamOrders (stream OrdersStreamRequest) returns (stream common.OrderResponse);
+    rpc StreamOrders (stream OrdersStreamRequest) returns (stream OrderResponse);
 
-    rpc GetOrder (GetOrderRequest) returns (common.OrderResponse);
-    rpc GetUserOrders (common.ListRequest) returns (common.AllOrdersResponse);
+    rpc GetOrder (GetOrderRequest) returns (OrderResponse);
+    rpc GetUserOrders (common.ListRequest) returns (AllOrdersResponse);
     rpc CancelAllOrders (common.Empty) returns (common.AckResponse);
 
     rpc ReloadUsers(common.Empty) returns (common.AckResponse);
 
     rpc GetUserTrades(common.ListRequest) returns (TradesPublic);
-    rpc GetUserPositions(common.Empty) returns (PositionsPublic);
-    rpc GetUserBalance(common.Empty) returns (BalancePublic);
+    rpc GetUserPositions(common.Empty) returns (stream PositionPublic);
+    rpc GetUserBalance(common.Empty) returns (stream BalancePublic);
 
-    //what leverage levels are available for each symbol for this user's group
     rpc GetAvailableLeverageLevels(common.ListRequest) returns (LeveragesPublic);
-    //what leverage levels has this user set.
     rpc GetUserLeverage(common.ListRequest) returns (LeveragesPublic);
     rpc SetUserLeverage(SetLeverageRequest) returns(common.AckResponse);
 }
@@ -88,7 +86,7 @@ message GetOrderRequest {
 
 message SetLeverageRequest {
     string symbol = 1;
-    string leverage = 2;
+    float leverage = 2;
     google.protobuf.Timestamp timestamp = 3;
 }
 
@@ -101,16 +99,36 @@ message LeveragesPublic{
 message LeveragePublic {
     string id = 1;
     string symbol = 2;
-    string intial_margin = 3;
-    string maintenance_margin = 4;
-    string max_position = 5;
+    double initial_margin = 3;
+    double maintenance_margin = 4;
+    double max_position = 5;
     string leverage = 6;
-
 }
 
 enum OrderRespType {
     ACK = 0;
     RESULT = 1;
+}
+
+message OrderResponse {
+    string order_id = 1;
+    string symbol = 2;
+    common.OrderStatus status = 3;
+    double quantity = 5;
+    double price = 6;
+    common.OrderDirection side = 7;
+    common.OrderType type = 8;
+    common.OrderTimeInForce time_in_force = 9;
+    google.protobuf.Timestamp update_time = 10;
+    string user_id = 11;
+    string client_order_id = 12;
+    double quantity_remaining = 13;
+}
+
+message AllOrdersResponse {
+    repeated OrderResponse orders = 1;
+    google.protobuf.Timestamp timestamp = 2;
+    int32 count = 3;
 }
 
 message TradePublic {
@@ -147,9 +165,14 @@ message PositionPublic {
     double realised_pnl = 9;
     double unrealised_pnl = 10;
     double net_funding = 11;
+    double open_orders_buy = 12;
+    double open_orders_sell = 13;
+    double open_quantity_buy = 14;
+    double open_quantity_sell = 15;
+    double leverage = 16;
+    double initial_margin = 17;
+    double maintenance_margin = 18;
 
-
-    google.protobuf.Timestamp last_updated = 98;
     google.protobuf.Timestamp timestamp = 99;
 }
   
@@ -167,8 +190,8 @@ message BalancePublic {
     float order_margin = 5;
     float position_margin = 6;
     float unrealised_pnl = 7;
-    float available_balance =8;
-    float net_funding =9;
+    float net_funding = 8;  
+    float available_balance = 9;
     google.protobuf.Timestamp timestamp = 99;
   }
 
