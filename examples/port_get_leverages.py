@@ -40,28 +40,17 @@ async def run():
 
     async with async_channel as channel:
         stub = port_pb2_grpc.PortServiceStub(channel)
-        stream = stub.GetUserPositions(common_pb2.Empty(), metadata=metadata)
-        while True:
-            try:
-                response = await stream.read()
-                break
-            except Exception as e:
-                pass
+        response = await stub.GetAvailableLeverageLevels(
+            common_pb2.ListRequest(limit=1000, offset=0), metadata=metadata
+        )
         print(
-            "positions",
+            "available leverages",
             response,
         )
-        stream = stub.GetUserBalance(common_pb2.Empty(), metadata=metadata)
-        while True:
-            try:
-                response = await stream.read()
-                break
-            except Exception as e:
-                pass
-        print(
-            "balances",
-            response,
+        response = await stub.GetUserLeverage(
+            common_pb2.ListRequest(limit=1000, offset=0), metadata=metadata
         )
+        print("user leverages", response)
 
 
 if __name__ == "__main__":

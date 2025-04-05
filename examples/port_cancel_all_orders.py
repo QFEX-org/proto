@@ -1,6 +1,6 @@
 # /// script
 # dependencies = [
-#   "grpcio-tools>=1.70.0",
+#   "grpcio-tools>=1.70.0","python-dotenv"
 # ]
 # ///
 
@@ -20,28 +20,30 @@ import grpc.aio
 import common_pb2 as common_pb2
 import port_pb2 as port_pb2
 import port_pb2_grpc as port_pb2_grpc
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 
 async def run():
-    # Define your API key
-    api_key_1 = "00000000-0000-4000-a000-000000000001"
-
+    # Define your API key 
     # Prepare metadata with the API key (used for authentication)
+    api_key_1 = os.getenv("PFEX_API_KEY")
     metadata = (("api-key", api_key_1),)
 
     print("Connecting to server...")
     # Create secure channel credentials (defaults are used here)
     creds = grpc.ssl_channel_credentials()
-    async_channel = grpc.aio.insecure_channel("trade.psex.io:443", creds)
+    async_channel = grpc.aio.secure_channel("trade.pfex.io:443", creds)
     # async_channel = grpc.aio.insecure_channel("localhost:50052")
 
     async with async_channel as channel:
-        stub = port_pb2_grpc.PortServiceStub(channel)
-        response = await stub.CancelAllOrders(common_pb2.Empty(), metadata=metadata)
-        print(
-            "positions",
-            response,
-        )
+    stub = port_pb2_grpc.PortServiceStub(channel)
+    response = await stub.CancelAllOrders(common_pb2.Empty(), metadata=metadata)
+    print(
+	"positions",
+	response,
+    )
 
 
 if __name__ == "__main__":

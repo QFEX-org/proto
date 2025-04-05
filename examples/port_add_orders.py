@@ -1,6 +1,6 @@
 # /// script
 # dependencies = [
-#   "grpcio-tools>=1.70.0",
+#   "grpcio-tools>=1.70.0", "python-dotenv"
 # ]
 # ///
 
@@ -21,20 +21,22 @@ import grpc.aio
 import common_pb2 as common_pb2
 import port_pb2 as port_pb2
 import port_pb2_grpc as port_pb2_grpc
-
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 async def write_orders(orders_stream):
     """Continuously write orders to the stream."""
     while True:
         request_buy = port_pb2.OrdersStreamRequest(
             add_order=port_pb2.AddOrderRequest(
-                symbol="SPY-USD",
+                symbol="SP500-USD",
                 side=random.choice(
                     [common_pb2.OrderDirection.BUY, common_pb2.OrderDirection.SELL]
                 ),
                 type=common_pb2.OrderType.LIMIT,
                 time_in_force=common_pb2.OrderTimeInForce.GFD,
-                quantity=random.randint(10, 100),
+                quantity=0.1,
                 price=random.randint(450, 550),
                 timestamp=datetime.now(),
             )
@@ -58,16 +60,17 @@ async def read_responses(orders_stream):
 
 async def run():
     # Define your API key
-    api_key_1 = "dcc765ce-a0f0-4f4f-9db1-e61c1e826ef0"
-
+    api_key_1 = os.getenv("PFEX_API_KEY")
+    assert api_key_1
     # Prepare metadata with the API key (used for authentication)
     metadata = (("api-key", api_key_1),)
 
     print("Connecting to server...")
     # Create secure channel credentials (defaults are used here)
     creds = grpc.ssl_channel_credentials()
-    async_channel = grpc.aio.secure_channel("trade.psex.io:443", creds)
-    #async_channel = grpc.aio.insecure_channel("localhost:50052")
+    async_channel = grpc.aio.secure_channel("trade.pfex.io:443", creds)
+    ###async_channel = grpc.aio.insecure_channel("localhost:50052")
+
 
     async with async_channel as channel:
         stub = port_pb2_grpc.PortServiceStub(channel)

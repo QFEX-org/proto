@@ -22,11 +22,11 @@ def run():
     creds = grpc.ssl_channel_credentials(
         root_certificates=None, private_key=None, certificate_chain=None
     )
-    channel = grpc.secure_channel("mds.psex.io:443", creds)
+    channel = grpc.secure_channel("mds.pfex.io:443", creds)
 
     stub = market_data_pb2_grpc.MarketDataServiceStub(channel)
 
-    request = market_data_pb2.GetSymbol(symbol="SPY-USD")
+    request = market_data_pb2.GetSymbol(symbol="SP500-USD")
     for response in stub.GetUnderlier(request):
         print(f"Received data: {response}")
 
