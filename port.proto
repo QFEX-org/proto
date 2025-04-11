@@ -15,7 +15,7 @@ service PortService {
     rpc ReloadUsers(common.Empty) returns (common.AckResponse);
 
     rpc GetUserTrades(common.ListRequest) returns (TradesPublic);
-    rpc GetUserPositions(common.Empty) returns (stream PositionPublic);
+    rpc GetUserPositions(common.Empty) returns (stream PositionsPublic);
     rpc GetUserBalance(common.Empty) returns (stream BalancePublic);
 
     rpc GetAvailableLeverageLevels(common.ListRequest) returns (LeveragesPublic);

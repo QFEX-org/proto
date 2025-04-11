@@ -13,11 +13,18 @@ service MarketDataService {
     rpc GetFundingRate(GetSymbol) returns (stream FundingRate);
 
     rpc GetRefData(common.Empty) returns (RefData);
+    rpc GetBbo(common.Empty) returns (stream OrderBook);
+    rpc GetLatestCandle(GetCandle) returns (stream Candle);
 }
 
 
 message GetSymbol {
     string symbol = 1;
+}
+
+message GetCandle {
+    string symbol = 1;
+    common.CandlesInterval interval = 2;
 }
 
 message OrderBookEntry {
@@ -84,8 +91,6 @@ message SymbolRefData {
     double volume_24h = 6;
     double trades_24h = 7;
     double next_funding_rate = 8;
-    string initial_margin_fraction = 9;
-    string maintenance_margin_fraction = 10;
     string tick_size = 11;
     string lot_size = 12;
     string min_price = 13;
@@ -105,4 +110,15 @@ message SymbolRefData {
 message RefData {
     repeated SymbolRefData symbols = 1;
     google.protobuf.Timestamp timestamp = 99;
+}
+
+message Candle {
+    string symbol = 1;
+    google.protobuf.Timestamp timestamp = 2;
+    double open = 3;
+    double high = 4;
+    double low = 5;
+    double close = 6;
+    double volume = 7;
+    int64 period = 8; // in seconds
 }
