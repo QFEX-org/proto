@@ -101,6 +101,12 @@ message TradePublic {
     int64 sell_fee = 13;
 }
 
+message GetUserLimitRequest {
+    string user_id = 1;
+    int32 limit = 2;
+    int32 offset = 3; 
+} 
+
 message TradesPublic {
     repeated TradePublic trades = 1;
     google.protobuf.Timestamp timestamp = 2;
@@ -159,6 +165,17 @@ message AppendOrderRequest {
     
     common.OrderStatus order_status = 50;
     optional bool is_passive = 51;
+
+    google.protobuf.Timestamp port_ingress_entry_time = 60;
+    google.protobuf.Timestamp port_ingress_exit_time = 61;
+    google.protobuf.Timestamp user_service_ingress_entry_time = 62;
+    google.protobuf.Timestamp user_service_ingress_exit_time = 63;
+    google.protobuf.Timestamp engine_entry_time = 64;
+    google.protobuf.Timestamp engine_exit_time = 65;
+    google.protobuf.Timestamp user_service_egress_entry_time = 66;
+    google.protobuf.Timestamp user_service_egress_exit_time = 67;
+    google.protobuf.Timestamp port_egress_entry_time = 68;
+
     optional string correlation_id = 98;
     google.protobuf.Timestamp timestamp = 99;
 }

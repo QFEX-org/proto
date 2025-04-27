@@ -23,10 +23,11 @@ def run():
         root_certificates=None, private_key=None, certificate_chain=None
     )
     channel = grpc.secure_channel("mds.pfex.io:443", creds)
+    channel = grpc.insecure_channel("localhost:50055")
 
     stub = market_data_pb2_grpc.MarketDataServiceStub(channel)
 
-    request = market_data_pb2.GetSymbol(symbol="AAPL-USD")
+    request = market_data_pb2.GetSymbol(symbol="SP500-USD")
     for response in stub.GetOrderBook(request):
         print(f"Received data: {response}")
 

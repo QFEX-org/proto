@@ -35,13 +35,13 @@ async def run():
 
     print("Connecting to server...")
     creds = grpc.ssl_channel_credentials()
-    async_channel = grpc.aio.secure_channel("trade.pfex.io:443", creds)
-    #async_channel = grpc.aio.insecure_channel("localhost:50052")
+    #async_channel = grpc.aio.secure_channel("trade.pfex.io:443", creds)
+    async_channel = grpc.aio.insecure_channel("localhost:50052")
 
     async with async_channel as channel:
         stub = port_pb2_grpc.PortServiceStub(channel)
         response = await stub.SetUserLeverage(
-            port_pb2.SetLeverageRequest(symbol="SP500-USD", leverage=5),
+            port_pb2.SetLeverageRequest(symbol="SP500-USD", leverage=25),
             metadata=metadata,
         )
         print(response)

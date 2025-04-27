@@ -1,0 +1,337 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "common.proto";
+
+package user;
+
+service UserService {
+    rpc ReadUsers (ReadUsersRequest) returns (UsersPublic);
+    rpc ReadUserById (common.UserRequest) returns (UserPublic);
+    rpc ReadAllUsers (common.Empty) returns (UsersPublic);
+    rpc GetUserFeeGroup (common.UserRequest) returns (UserFeeGroup);
+    rpc GetUserMarginGroup (common.UserRequest) returns (UserMarginGroup);
+    rpc RegisterUser (CreateUserRequest) returns (UserPublic);
+    // SHOULD ONLY BE POSSIBLE BY REST API AND FROM LOCAL NETWORK
+    rpc ReadUserByIdPrivate (common.UserRequest) returns (UserPrivate);
+    rpc ReadUserByEmailPrivate (UserEmailRequest) returns (UserPrivate);
+}
+
+
+message UserEmailRequest {
+    string email = 1;
+}
+
+message UserFeeGroup {
+    string user_id = 1;
+    string fee_group_id = 2;
+}
+
+message UserMarginGroup {
+    string user_id = 1;
+    string margin_group_id = 2;
+}
+  
+message UserPublic {
+    string id = 1;
+    string email = 2;
+    bool is_superuser = 3;
+    bool is_institution = 4;
+    bool is_active = 5;
+    string api_key = 6;
+    string full_name = 7;
+  }
+
+message UserPrivate {
+    string id = 1;
+    string email = 2;
+    bool is_superuser = 3;
+    bool is_institution = 4;
+    bool is_active = 5;
+    string api_key = 6;
+    string full_name = 7;
+    string hashed_password = 8;
+    string fee_id = 9;
+    string margin_id = 10;
+  }
+  
+  message UsersPublic {
+    repeated UserPublic data = 1;
+    int64 count = 2;
+  }
+  
+  message CreateUserRequest {
+    string email = 1;
+    string password = 2;
+    string full_name = 3;
+  }
+  
+  message UserCreateResponse {
+    UserPublic user = 1;
+  }
+  
+  message ReadUsersRequest {
+    int32 skip = 1;
+    int32 limit = 2;
+  }
+
+
+
+service TradeService {
+    rpc AddTrade (AddTradeRequest) returns (common.TradePublic);
+    rpc GetTrade (common.ListRequest) returns (common.TradePublic);
+    rpc GetTrades (common.ListRequest) returns (common.TradesPublic);
+    rpc GetUserTrades (common.GetUserLimitRequest) returns (common.TradesPublic);
+    rpc GetMostRecentTradeSlow (common.Empty) returns (AppendTradeRequest);
+}
+message AppendTradeRequest {
+    string trade_id = 1;
+    string symbol = 2;
+    common.OrderDirection aggressor_side = 3;
+    string buy_user_id = 4;
+    string sell_user_id = 5;
+    string buy_order_id = 6;
+    string sell_order_id = 7;
+    int64 buy_fee = 8;
+    int64 sell_fee = 9;
+    uint64 quantity = 12;
+    uint64 price = 13;
+    common.OrderTimeInForce buyer_time_in_force = 14;
+    uint64 buyer_order_price = 15;
+    common.OrderTimeInForce seller_time_in_force = 16;
+    uint64 seller_order_price = 17;
+    string buy_client_order_id = 18;
+    string sell_client_order_id = 19;
+
+    string correlation_id = 98;
+    google.protobuf.Timestamp timestamp = 99;
+  }
+
+
+message AddTradeRequest {
+    string symbol = 1;
+    int64 price = 2;
+    int64 quantity = 3;
+    google.protobuf.Timestamp timestamp = 4;
+
+    common.OrderDirection aggressor_side = 5;
+    string buy_order_id = 8;
+    string sell_order_id = 9;
+    string buy_user_id = 10;
+    string sell_user_id = 11;
+    int64 buyer_initial_margin = 12;
+    int64 seller_initial_margin = 13;
+}
+
+message GetTradeRequest {
+    string trade_id = 1;
+    string symbol = 2;
+}
+
+service BalanceService {
+    rpc GetBalances (ReadBalancesRequest) returns (BalancesPublic);
+    rpc GetBalance (common.UserRequest) returns (common.BalancePublic);
+    // This calls the DB to get the balance instead of the cache
+    rpc GetBalanceSlow (common.UserRequest) returns (common.BalancePublic);
+    rpc GetAllBalances (common.Empty) returns (stream common.BalancePublic);
+    rpc UpdateBalance (UpdateBalanceRequest) returns (common.BalancePublic);
+    rpc DepositBalance (DepositRequest) returns (common.BalancePublic);
+}
+
+message DepositRequest {
+    string user_id = 1;
+    int64 deposit = 2;
+}
+
+message ReadBalancesRequest {
+    int32 skip = 1;
+    int32 limit = 2;
+}
+
+message BalancesPublic {
+  repeated common.BalancePublic data = 1;
+  int64 count = 2;
+}
+
+enum TransactionType {
+  ORDER_PLACEMENT = 0;                      
+  ORDER_CANCELLATION = 1;
+  ORDER_MODIFICATION = 2;
+  TRADE = 3;
+}
+
+message UpdateBalanceRequest {
+    string user_id = 1;
+    int64 deposit_change = 2;
+    int64 realised_pnl_change = 3;
+    int64 order_margin_change = 4;
+    int64 position_margin_change = 5;
+    int64 unrealised_pnl_change = 6;
+    int64 net_funding_change = 7;
+    int64 fees_change = 8;
+
+    string transaction_id = 10;
+    TransactionType transaction_type = 11;
+    
+
+    string correlation_id = 98;
+    google.protobuf.Timestamp timestamp = 99;
+}
+
+message AddBalanceRequest {
+    string user_id = 1;
+    int64 cash = 2;
+}
+
+service OrderService {
+  rpc GetMostRecentOrderSlow(common.Empty) returns (common.AppendOrderRequest);
+  rpc GetUserOrders(common.GetUserLimitRequest) returns (OrdersPublic);
+}
+
+service MarginService {
+  rpc CheckMargin (CheckMarginRequest) returns (CheckMarginResponse);
+  rpc GetAvailableLeverageLevels (common.UserRequest) returns (LeveragesPublic);
+  rpc GetUserLeverage (common.UserRequest) returns (LeveragesPublic);
+  rpc SetUserLeverage (SetLeverageRequest) returns (common.AckResponse);
+}
+
+message CheckMarginRequest {
+  string user_id = 1;
+  string symbol = 2;
+  int64 old_quantity = 3;
+  int64 quantity = 4;
+  int64 old_price = 5;
+  int64 price = 6;
+  common.OrderDirection side = 7;
+}
+
+message CheckMarginResponse {
+  bool is_margin_sufficient = 1;
+  int64 margin_required = 2;
+}
+
+message LeveragesPublic {
+  repeated LeveragePublic leverages = 1;
+  string user_id = 2;
+  google.protobuf.Timestamp timestamp = 3;
+}
+
+message LeveragePublic{
+  string id = 1;
+  string symbol = 2;
+  double initial_margin = 3;
+  double maintenance_margin = 4;
+  int64 max_position = 5;
+  string leverage = 6;
+}
+
+message SetLeverageRequest {
+  string user_id = 1;
+  string symbol = 2;
+  float leverage = 3;
+  google.protobuf.Timestamp timestamp = 4;
+}
+
+service ManageService {
+  rpc ReloadFees(common.Empty) returns (common.AckResponse);
+  rpc ReloadMargin(common.Empty) returns (common.AckResponse);
+  rpc FlushFastBalances(common.Empty) returns (common.AckResponse);
+  rpc FlushFastPositions(common.Empty) returns (common.AckResponse);
+}
+
+service PositionService {
+  rpc GetPosition (PositionRequest) returns (PositionPublic);
+  rpc GetUserPositions (common.UserRequest) returns (PositionsPublic);
+  // This calls the DB to get the position instead of the cache
+  rpc GetPositionSlow (PositionRequest) returns (PositionPublic);
+  rpc CreatePosition (PositionRequest) returns (PositionPublic);
+  rpc GetAllPositions (common.Empty) returns (stream PositionsPublic);
+
+  rpc ApplyFunding (ApplyFundingRequest) returns (common.Empty);
+}
+
+message ApplyFundingRequest {
+  string symbol = 1;
+  int64 notional_value_per_quantity = 2;
+}
+
+message PositionRequest {
+  string user_id = 1;
+  string symbol = 2;
+}
+
+
+message PositionPublic {
+  string id = 1;
+  string symbol = 2;
+  string user_id = 3;
+  int64 quantity_buy = 4;
+  int64 quantity_sell = 5;
+  int64 price_buy = 6;
+  int64 price_sell = 7;
+  float margin_alloc = 8;
+  int64 realised_pnl = 9;
+  int64 unrealised_pnl = 10;
+  int64 net_funding = 11;
+  int64 open_orders_buy = 12;
+  int64 open_orders_sell = 13;
+  int64 open_quantity_buy = 14;
+  int64 open_quantity_sell = 15;
+  double leverage = 16;
+  double initial_margin = 17;
+  double maintenance_margin = 18;
+
+  google.protobuf.Timestamp timestamp = 99;
+}
+
+message PositionsPublic {
+  repeated PositionPublic data = 1;
+  int64 count = 2;
+  google.protobuf.Timestamp timestamp = 3;
+}
+
+message UpdatePositionRequest {
+  string user_id = 1;
+  string symbol = 2;
+  int64 quantity_buy_change = 3;
+  int64 quantity_sell_change = 4;
+  int64 price_buy_change = 5;
+  int64 price_sell_change = 6;
+  float margin_alloc = 7;
+  int64 realised_pnl_change = 8;
+  int64 fees_change = 9;
+  int64 net_funding_change = 10;
+  int64 average_price = 11;     // Absolute value of average price
+  int64 open_orders_buy_change = 12;
+  int64 open_orders_sell_change = 13;
+  int64 open_quantity_buy_change = 14;
+  int64 open_quantity_sell_change = 15;
+  double leverage = 16;
+
+  string transaction_id = 50;
+  TransactionType transaction_type = 51;
+
+  string correlation_id = 98;
+  google.protobuf.Timestamp timestamp = 99;
+}
+
+message OrderPublic {
+    string order_id = 1;
+    string symbol = 2;
+    common.OrderDirection side = 3;
+    common.OrderType type = 4;
+    common.OrderTimeInForce time_in_force = 5;
+    uint64 quantity = 6;
+    uint64 price = 7;
+    string user_id = 8;
+    string client_order_id = 9;
+    common.OrderStatus status = 10;
+    uint64 quantity_remaining = 11;
+    google.protobuf.Timestamp update_time = 12;
+}
+
+message OrdersPublic {
+    repeated OrderPublic orders = 1;
+    google.protobuf.Timestamp timestamp = 2;
+    int32 count = 3;
+}

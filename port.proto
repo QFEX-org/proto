@@ -17,12 +17,16 @@ service PortService {
     rpc GetUserTrades(common.ListRequest) returns (TradesPublic);
     rpc GetUserPositions(common.Empty) returns (stream PositionsPublic);
     rpc GetUserBalance(common.Empty) returns (stream BalancePublic);
+    rpc PnlLeaderboard(common.Empty) returns (stream UserBalancesPublic);
 
     rpc GetAvailableLeverageLevels(common.ListRequest) returns (LeveragesPublic);
     rpc GetUserLeverage(common.ListRequest) returns (LeveragesPublic);
     rpc SetUserLeverage(SetLeverageRequest) returns(common.AckResponse);
-}
 
+    // Superuser methods. These require superuser privileges.
+    rpc DepositFunds (DepositRequest) returns (common.AckResponse);
+
+}
 
 message AddOrderRequest {
     string symbol = 1;
@@ -165,12 +169,35 @@ message BalancePublic {
     float net_funding = 8;  
     float available_balance = 9;
     google.protobuf.Timestamp timestamp = 99;
-  }
+}
 
+message UserBalancePublic {
+    string id = 1;
+    string name = 2;
+    float deposit = 3;
+    float realised_pnl = 4;
+    float order_margin = 5;
+    float position_margin = 6;
+    float unrealised_pnl = 7;
+    float net_funding = 8;  
+    float available_balance = 9;
+    google.protobuf.Timestamp timestamp = 99;
+}
+message UserBalancesPublic {
+    repeated UserBalancePublic data = 1;
+    int64 count = 2;
+    google.protobuf.Timestamp timestamp = 3;
+  }
 message OrdersStreamRequest {
     oneof request_type {
         AddOrderRequest add_order = 1;
         CancelOrderRequest cancel_order = 2;
         ModifyOrderRequest modify_order = 3;
     }   
+}
+
+
+message DepositRequest {
+    string user_id = 1;
+    int64 deposit = 2;
 }

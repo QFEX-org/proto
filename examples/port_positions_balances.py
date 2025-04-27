@@ -36,7 +36,7 @@ async def run():
     print("Connecting to server...")
     creds = grpc.ssl_channel_credentials()
     async_channel = grpc.aio.secure_channel("trade.pfex.io:443", creds)
-    #async_channel = grpc.aio.insecure_channel("localhost:50052")
+    async_channel = grpc.aio.insecure_channel("localhost:50052")
 
     async with async_channel as channel:
         stub = port_pb2_grpc.PortServiceStub(channel)
@@ -44,24 +44,9 @@ async def run():
         while True:
             try:
                 response = await stream.read()
-                break
+                print("balances", response)
             except Exception as e:
                 pass
-        print(
-            "positions",
-            response,
-        )
-        stream = stub.GetUserBalance(common_pb2.Empty(), metadata=metadata)
-        while True:
-            try:
-                response = await stream.read()
-                break
-            except Exception as e:
-                pass
-        print(
-            "balances",
-            response,
-        )
 
 
 if __name__ == "__main__":

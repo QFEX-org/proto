@@ -31,7 +31,7 @@ async def write_orders(orders_stream):
         request_buy = port_pb2.OrdersStreamRequest(
             add_order=port_pb2.AddOrderRequest(
                 symbol="SP500-USD",
-                side=common_pb2.OrderDirection.SELL,
+                side=common_pb2.OrderDirection.BUY,
                 type=common_pb2.OrderType.LIMIT,
                 time_in_force=common_pb2.OrderTimeInForce.GFD,
                 quantity=1,
@@ -57,8 +57,7 @@ async def read_responses(orders_stream):
 
 async def run():
     # Define your API key
-    api_key_1 = os.getenv("PFEX_API_KEY")
-    assert api_key_1
+    api_key_1 = "a00fdce9-7d62-413b-b26c-42fa23717950" 
     # Prepare metadata with the API key (used for authentication)
     metadata = (("api-key", api_key_1),)
 
