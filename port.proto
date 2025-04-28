@@ -10,7 +10,7 @@ service PortService {
 
     rpc GetOrder (GetOrderRequest) returns (OrderResponse);
     rpc GetUserOrders (common.ListRequest) returns (AllOrdersResponse);
-    rpc CancelAllOrders (common.Empty) returns (common.AckResponse);
+    rpc CancelAllOrders (CancelAllOrdersRequest) returns (common.AckResponse);
 
     rpc ReloadUsers(common.Empty) returns (common.AckResponse);
 
@@ -174,4 +174,9 @@ message OrdersStreamRequest {
         CancelOrderRequest cancel_order = 2;
         ModifyOrderRequest modify_order = 3;
     }   
+}
+
+
+message CancelAllOrdersRequest {
+    repeated string symbols = 1;
 }
