@@ -9,8 +9,7 @@ message Empty {}
 enum OrderType {
     LIMIT = 0;                   // Limit order
     MARKET = 1;                  // Market order
-    LIQUIDATE = 2;
-    ALO = 3;
+    ALO = 3;                     // Add Liquidity Order. If the order would cross the book, the order will be rejected.
 }
 
 enum OrderDirection {
@@ -19,7 +18,7 @@ enum OrderDirection {
 }
 
 enum OrderTimeInForce {
-    GFD = 0;                      // Good till canceled
+    GTC = 0;                      // Good till canceled
     IOC = 1;                      // Immediate or cancel
     FOK = 2;                      // Fill or kill
 }
@@ -34,45 +33,33 @@ enum OrderAction {
 }
 
 enum OrderStatus {
-    ACK = 0;
-    EXPIRED = 6;
-    IOC_CANCELLED = 7;
-    INVALID_PRICE = 8;
-    INVALID_QUANTITY = 9;
-    NOT_FOUND = 10;
-    IOC_PARTIALLY_FILLED = 11;
-    USER_NOT_FOUND = 12;
-    PERMISSION_DENIED = 13;
+    ACK = 0;                                    // Order accepted                 
+    NOT_FOUND = 10;                             // Order not found
     
-    // New ENUM values for new and improved
-    // Anything above here and not here is on the way out.
-    FILLED = 2;
-    MODIFIED = 20;
-    CANCELLED = 30;
-    CANCELLED_STP = 31;
-
-    REJECTED = 50;
-    NO_SUCH_ORDER = 52;
-    INVALID_ORDER_TYPE = 53;
-    BAD_SYMBOL = 54;
-    PRICE_LESS_THAN_MIN_PRICE = 55;
-    PRICE_GREATER_THAN_MAX_PRICE = 56;
-    CANNOT_MODIFY_PARTIAL_FILL = 58;
-    FAILED_MARGIN_CHECK = 60;
-    REJECTED_MUST_CHANGE_VALUE_MODIFY = 61;
-    NO_CHANGE_NO_UPDATE = 62;
-    INVALID_TICK_SIZE_PRECISION_PRICE = 63;
-    INVALID_TICK_SIZE_PRECISION_QUANTITY = 64;
-    QUANTITY_LESS_THAN_MIN_QUANTITY = 65;
-    QUANTITY_GREATER_THAN_MAX_QUANTITY = 66;
-    REJECTED_GREATER_THAN_MAX_PRICE_BAND = 67;
-    REJECTED_LESS_THAN_MIN_PRICE_BAND = 68;
-    INVALID_TIME_IN_FORCE = 69;
-    REJECTED_WOULD_BREACH_MAX_POSITION = 70;
-    CANNOT_MODIFY_NO_SUCH_ORDER = 71;
-    REJECTED_MARKET_CLOSED = 72;
-
-    RATE_LIMITED = 97;
+    FILLED = 2;                                 // Order filled, this could be partially filled.
+    MODIFIED = 20;                              // Order successfully modified
+    CANCELLED = 30;                             // Order successfully cancelled
+    CANCELLED_STP = 31;                         // Order cancelled by self trade prevention
+    
+    REJECTED = 50;                              // Order rejected   
+    NO_SUCH_ORDER = 52;                         // No such order exists
+    INVALID_ORDER_TYPE = 53;                    // Invalid order type
+    BAD_SYMBOL = 54;                            // Invalid symbol
+    PRICE_LESS_THAN_MIN_PRICE = 55;             // Price less than minimum price for this symbol
+    PRICE_GREATER_THAN_MAX_PRICE = 56;          // Price greater than maximum price for this symbol
+    CANNOT_MODIFY_PARTIAL_FILL = 58;            // Cannot modify partial fill. Please cancel your current order and place a new order.
+    FAILED_MARGIN_CHECK = 60;                   // Failed margin check. Please check your available balance.
+    INVALID_TICK_SIZE_PRECISION_PRICE = 63;     // Invalid tick size for this symbol. Check the price tick size in the reference data.
+    INVALID_TICK_SIZE_PRECISION_QUANTITY = 64;  // Invalid tick size for this symbol. Check the quantity tick size in the reference data.
+    QUANTITY_LESS_THAN_MIN_QUANTITY = 65;       // Quantity less than minimum quantity for this symbol. Check the minimum quantity in the reference data.
+    QUANTITY_GREATER_THAN_MAX_QUANTITY = 66;    // Quantity greater than maximum quantity for this symbol. Check the maximum quantity in the reference data.
+    REJECTED_GREATER_THAN_MAX_PRICE_BAND = 67;  // Rejected greater than max price band. Check the max price band in the reference data.
+    REJECTED_LESS_THAN_MIN_PRICE_BAND = 68;     // Rejected less than min price band. Check the min price band in the reference data.
+    INVALID_TIME_IN_FORCE = 69;                 // Invalid time in force for this order type.
+    REJECTED_WOULD_BREACH_MAX_POSITION = 70;    // Rejected would breach max position. Check the max position for your account in gRPC PortService.GetUserLeverage
+    CANNOT_MODIFY_NO_SUCH_ORDER = 71;           // Failed to modify this order. Order does not exist.
+    REJECTED_MARKET_CLOSED = 72;                // QFEX is currently not accepting orders for this symbol.
+    RATE_LIMITED = 97;                          // You have sent too many requests to trade.pfex.io. Please slow down or contact support to raise your limits.
 }
 
 message AckResponse {
@@ -100,6 +87,12 @@ message TradePublic {
     int64 buy_fee = 12;
     int64 sell_fee = 13;
 }
+
+message GetUserLimitRequest {
+    string user_id = 1;
+    int32 limit = 2;
+    int32 offset = 3; 
+} 
 
 message TradesPublic {
     repeated TradePublic trades = 1;
@@ -136,6 +129,7 @@ message BalancePublic {
     int64 unrealised_pnl = 7;
     int64 available_balance = 8;
     int64 net_funding = 9;
+    int64 fees = 10;
 
     bool is_institution = 50;
 
@@ -157,12 +151,26 @@ message AppendOrderRequest {
     string client_order_id = 13;
     uint64 passive_qty = 14;
     
+    OrderBookEntry best_bid = 20;
+    OrderBookEntry best_ask = 21;
+    
     common.OrderStatus order_status = 50;
     optional bool is_passive = 51;
+
+    google.protobuf.Timestamp port_ingress_entry_time = 60;
+    google.protobuf.Timestamp port_ingress_exit_time = 61;
+    google.protobuf.Timestamp user_service_ingress_entry_time = 62;
+    google.protobuf.Timestamp user_service_ingress_exit_time = 63;
+    google.protobuf.Timestamp engine_entry_time = 64;
+    google.protobuf.Timestamp engine_exit_time = 65;
+    google.protobuf.Timestamp user_service_egress_entry_time = 66;
+    google.protobuf.Timestamp user_service_egress_exit_time = 67;
+    google.protobuf.Timestamp port_egress_entry_time = 68;
+
     optional string correlation_id = 98;
     google.protobuf.Timestamp timestamp = 99;
 }
-  
+
 message Underlier {
     string symbol = 1;
     uint64 price = 2;
