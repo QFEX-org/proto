@@ -6,32 +6,27 @@ package common;
 
 message Empty {}
 
+/// This defines how the order is executed by the engine.
 enum OrderType {
     LIMIT = 0;                   // Limit order
     MARKET = 1;                  // Market order
     ALO = 3;                     // Add Liquidity Order. If the order would cross the book, the order will be rejected.
 }
 
+/// This defines the direction of the order.
 enum OrderDirection {
     BUY = 0;                      // Buy order
     SELL = 1;                     // Sell order
 }
 
+/// This defines the time in force of the order.
 enum OrderTimeInForce {
-    GTC = 0;                      // Good till canceled
-    IOC = 1;                      // Immediate or cancel
-    FOK = 2;                      // Fill or kill
+    GTC = 0;                      // Good till canceled. This order will stay in the book until it is filled or canceled.
+    IOC = 1;                      // Immediate or cancel. This order will fill as much as possible and then be canceled. If the order cannot be filled immediately, the remaining quantity will be canceled.
+    FOK = 2;                      // Fill or kill. This order will be canceled if it cannot be filled immediately. If the order cannot be filled immediately, the entire order will be canceled.
 }
 
-enum OrderAction {
-    NEW = 0;
-    MODIFY = 1;
-    CANCEL = 2;
-    FLUSH = 3;
-    FILL = 4;
-    INIT = 99;
-}
-
+/// This is returned on any order response. This will indicate the current status of the order.
 enum OrderStatus {
     ACK = 0;                                    // Order accepted                 
     NOT_FOUND = 10;                             // Order not found
