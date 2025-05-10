@@ -28,32 +28,32 @@ enum OrderTimeInForce {
 
 /// This is returned on any order response. This will indicate the current status of the order.
 enum OrderStatus {
-    ACK = 0;                                    // Order accepted                 
+    ACK = 0;                                    // Order accepted.
     
     FILLED = 2;                                 // Order filled, this could be partially filled.
-    MODIFIED = 20;                              // Order successfully modified
-    CANCELLED = 30;                             // Order successfully cancelled
-    CANCELLED_STP = 31;                         // Order cancelled by self trade prevention
+    MODIFIED = 20;                              // Order successfully modified.
+    CANCELLED = 30;                             // Order successfully cancelled.
+    CANCELLED_STP = 31;                         // Order cancelled by self trade prevention.
     
     REJECTED = 50;                              // Order rejected   
-    NO_SUCH_ORDER = 52;                         // No such order exists
-    INVALID_ORDER_TYPE = 53;                    // Invalid order type
-    BAD_SYMBOL = 54;                            // Invalid symbol
-    PRICE_LESS_THAN_MIN_PRICE = 55;             // Price less than minimum price for this symbol
-    PRICE_GREATER_THAN_MAX_PRICE = 56;          // Price greater than maximum price for this symbol
-    CANNOT_MODIFY_PARTIAL_FILL = 58;            // Cannot modify partial fill. Please cancel your current order and place a new order.
+    NO_SUCH_ORDER = 52;                         // Cancel rejected, no such order exists.
+    INVALID_ORDER_TYPE = 53;                    // Invalid order type.
+    BAD_SYMBOL = 54;                            // Invalid symbol.
+    PRICE_LESS_THAN_MIN_PRICE = 55;             // Price less than minimum price for this symbol.
+    PRICE_GREATER_THAN_MAX_PRICE = 56;          // Price greater than maximum price for this symbol.
+    CANNOT_MODIFY_PARTIAL_FILL = 58;            // Cannot modify partially filled order. Please cancel your current order and place a new order.
     FAILED_MARGIN_CHECK = 60;                   // Failed margin check. Please check your available balance.
     INVALID_TICK_SIZE_PRECISION_PRICE = 63;     // Invalid tick size for this symbol. Check the price tick size in the reference data.
-    INVALID_TICK_SIZE_PRECISION_QUANTITY = 64;  // Invalid tick size for this symbol. Check the quantity tick size in the reference data.
-    QUANTITY_LESS_THAN_MIN_QUANTITY = 65;       // Quantity less than minimum quantity for this symbol. Check the minimum quantity in the reference data.
-    QUANTITY_GREATER_THAN_MAX_QUANTITY = 66;    // Quantity greater than maximum quantity for this symbol. Check the maximum quantity in the reference data.
-    REJECTED_GREATER_THAN_MAX_PRICE_BAND = 67;  // Rejected greater than max price band. Check the max price band in the reference data.
-    REJECTED_LESS_THAN_MIN_PRICE_BAND = 68;     // Rejected less than min price band. Check the min price band in the reference data.
+    INVALID_TICK_SIZE_PRECISION_QUANTITY = 64;  // Invalid lot size for this symbol. Check the lot size in the reference data.
+    QUANTITY_LESS_THAN_MIN_QUANTITY = 65;       // Quantity less than minimum for this symbol. Check the minimum quantity in the reference data.
+    QUANTITY_GREATER_THAN_MAX_QUANTITY = 66;    // Quantity greater than maximum for this symbol. Check the maximum quantity in the reference data.
+    REJECTED_GREATER_THAN_MAX_PRICE_BAND = 67;  // Price greater than max price. Check the max price in the reference data.
+    REJECTED_LESS_THAN_MIN_PRICE_BAND = 68;     // Price less than min price. Check the min price in the reference data.
     INVALID_TIME_IN_FORCE = 69;                 // Invalid time in force for this order type.
-    REJECTED_WOULD_BREACH_MAX_POSITION = 70;    // Rejected would breach max position. Check the max position for your account in gRPC PortService.GetUserLeverage
+    REJECTED_WOULD_BREACH_MAX_POSITION = 70;    // Would breach max position. Check the max position for your account in gRPC PortService.GetUserLeverage.
     CANNOT_MODIFY_NO_SUCH_ORDER = 71;           // Failed to modify this order. Order does not exist.
     REJECTED_MARKET_CLOSED = 72;                // QFEX is currently not accepting orders for this symbol.
-    RATE_LIMITED = 97;                          // You have sent too many requests to trade.pfex.io. Please slow down or contact support to raise your limits.
+    RATE_LIMITED = 97;                          // You have sent too many requests to trade.pfex.io. Please contact support@qfex.com to raise your limits.
 }
 
 message AckResponse {
