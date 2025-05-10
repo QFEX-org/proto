@@ -29,7 +29,6 @@ enum OrderTimeInForce {
 /// This is returned on any order response. This will indicate the current status of the order.
 enum OrderStatus {
     ACK = 0;                                    // Order accepted                 
-    NOT_FOUND = 10;                             // Order not found
     
     FILLED = 2;                                 // Order filled, this could be partially filled.
     MODIFIED = 20;                              // Order successfully modified
