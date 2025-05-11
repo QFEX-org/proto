@@ -5,6 +5,7 @@ import "google/protobuf/timestamp.proto";
 import "common.proto";
 
 option java_package = "com.qfex.market_data";
+option java_multiple_files = true;
 
 package market_data;
 

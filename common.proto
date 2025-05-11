@@ -2,6 +2,7 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 option java_package = "com.qfex.common";
+option java_multiple_files = true;
 
 
 package common;
@@ -27,6 +28,15 @@ enum OrderTimeInForce {
     IOC = 1;                      // Immediate or cancel. This order will fill as much as possible and then be canceled. If the order cannot be filled immediately, the remaining quantity will be canceled.
     FOK = 2;                      // Fill or kill. This order will be canceled if it cannot be filled immediately. If the order cannot be filled immediately, the entire order will be canceled.
 }
+
+/// Internal definition of the order action.
+enum OrderAction {
+    NEW = 0;                      // Order was added
+    MODIFY = 1;                   // Order was modified
+    CANCEL = 2;                   // Order was canceled
+    FILL = 4;                     // Order was filled
+}
+
 
 /// This is returned on any order response. This will indicate the current status of the order.
 enum OrderStatus {
