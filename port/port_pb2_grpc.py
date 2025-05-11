@@ -3,8 +3,8 @@
 import grpc
 import warnings
 
-import common_pb2 as common__pb2
-import port_pb2 as port__pb2
+from common import common_pb2 as common__pb2
+from port import port_pb2 as port__pb2
 
 GRPC_GENERATED_VERSION = '1.70.0'
 GRPC_VERSION = grpc.__version__

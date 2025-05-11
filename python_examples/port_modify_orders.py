@@ -18,11 +18,11 @@ import logging
 import random
 import grpc.aio
 
-import common_pb2 as common_pb2
-import port_pb2 as port_pb2
-import port_pb2_grpc as port_pb2_grpc
+from common import common_pb2
+from port import port_pb2, port_pb2_grpc
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 
@@ -59,7 +59,7 @@ async def read_responses(orders_stream):
 
 async def run():
     # Define your API key
-    api_key_1 = os.getenv("PFEX_API_KEY")
+    api_key_1 = os.getenv("QFEX_API_KEY")
 
     # Prepare metadata with the API key (used for authentication)
     metadata = (("api-key", api_key_1),)

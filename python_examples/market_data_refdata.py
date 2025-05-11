@@ -6,9 +6,8 @@
 
 import grpc
 
-import common_pb2 as common_pb2
-import market_data_pb2 as market_data_pb2
-import market_data_pb2_grpc as market_data_pb2_grpc
+from common import common_pb2
+from market_data import market_data_pb2, market_data_pb2_grpc
 
 """
 TO RUN THIS FILE:
@@ -26,9 +25,9 @@ def run():
 
     stub = market_data_pb2_grpc.MarketDataServiceStub(channel)
 
-    request = market_data_pb2.GetSymbol(symbol="SP500-USD")
-    for response in stub.GetUnderlier(request):
-        print(f"Received data: {response}")
+    request = common_pb2.Empty()
+    response = stub.GetRefData(request)
+    print(f"Received data: {response}")
 
 
 if __name__ == "__main__":

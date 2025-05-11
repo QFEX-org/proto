@@ -3,8 +3,8 @@
 import grpc
 import warnings
 
-import common_pb2 as common__pb2
-import market_data_pb2 as market__data__pb2
+from common import common_pb2 as common__pb2
+from market_data import market_data_pb2 as market__data__pb2
 
 GRPC_GENERATED_VERSION = '1.70.0'
 GRPC_VERSION = grpc.__version__

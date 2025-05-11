@@ -13,22 +13,20 @@ To effectively fetch these, asynchronously read the responses in a loop separate
 """
 
 import asyncio
-from datetime import datetime
 import logging
-import random
 import grpc.aio
 
-import common_pb2 as common_pb2
-import port_pb2 as port_pb2
-import port_pb2_grpc as port_pb2_grpc
+from common import common_pb2
+from port import port_pb2, port_pb2_grpc
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 
 async def run():
     # Define your API key
-    api_key_1 = os.getenv("PFEX_API_KEY")
+    api_key_1 = os.getenv("QFEX_API_KEY")
 
     # Prepare metadata with the API key (used for authentication)
     metadata = (("api-key", api_key_1),)
@@ -36,15 +34,21 @@ async def run():
     print("Connecting to server...")
     creds = grpc.ssl_channel_credentials()
     async_channel = grpc.aio.secure_channel("trade.pfex.io:443", creds)
-    #async_channel = grpc.aio.insecure_channel("localhost:50052")
+    # async_channel = grpc.aio.insecure_channel("localhost:50052")
 
     async with async_channel as channel:
         stub = port_pb2_grpc.PortServiceStub(channel)
-        response = await stub.SetUserLeverage(
-            port_pb2.SetLeverageRequest(symbol="SP500-USD", leverage=5),
-            metadata=metadata,
+        response = await stub.GetAvailableLeverageLevels(
+            common_pb2.ListRequest(limit=1000, offset=0), metadata=metadata
         )
-        print(response)
+        print(
+            "available leverages",
+            response,
+        )
+        response = await stub.GetUserLeverage(
+            common_pb2.ListRequest(limit=1000, offset=0), metadata=metadata
+        )
+        print("user leverages", response)
 
 
 if __name__ == "__main__":
