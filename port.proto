@@ -4,6 +4,7 @@ import "google/protobuf/timestamp.proto";
 import "common.proto";
 
 package port;
+option java_package = "com.qfex.port";
 
 service PortService {
     rpc StreamOrders (stream OrdersStreamRequest) returns (stream OrderResponse);
