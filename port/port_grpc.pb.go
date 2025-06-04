@@ -28,9 +28,11 @@ const (
 	PortService_GetUserTrades_FullMethodName              = "/port.PortService/GetUserTrades"
 	PortService_GetUserPositions_FullMethodName           = "/port.PortService/GetUserPositions"
 	PortService_GetUserBalance_FullMethodName             = "/port.PortService/GetUserBalance"
+	PortService_PnlLeaderboard_FullMethodName             = "/port.PortService/PnlLeaderboard"
 	PortService_GetAvailableLeverageLevels_FullMethodName = "/port.PortService/GetAvailableLeverageLevels"
 	PortService_GetUserLeverage_FullMethodName            = "/port.PortService/GetUserLeverage"
 	PortService_SetUserLeverage_FullMethodName            = "/port.PortService/SetUserLeverage"
+	PortService_DepositFunds_FullMethodName               = "/port.PortService/DepositFunds"
 )
 
 // PortServiceClient is the client API for PortService service.
@@ -45,9 +47,12 @@ type PortServiceClient interface {
 	GetUserTrades(ctx context.Context, in *common.ListRequest, opts ...grpc.CallOption) (*TradesPublic, error)
 	GetUserPositions(ctx context.Context, in *common.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[PositionsPublic], error)
 	GetUserBalance(ctx context.Context, in *common.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[BalancePublic], error)
+	PnlLeaderboard(ctx context.Context, in *common.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[UserBalancesPublic], error)
 	GetAvailableLeverageLevels(ctx context.Context, in *common.ListRequest, opts ...grpc.CallOption) (*LeveragesPublic, error)
 	GetUserLeverage(ctx context.Context, in *common.ListRequest, opts ...grpc.CallOption) (*LeveragesPublic, error)
 	SetUserLeverage(ctx context.Context, in *SetLeverageRequest, opts ...grpc.CallOption) (*common.AckResponse, error)
+	// Superuser methods. These require superuser privileges.
+	DepositFunds(ctx context.Context, in *DepositRequest, opts ...grpc.CallOption) (*common.AckResponse, error)
 }
 
 type portServiceClient struct {
@@ -159,6 +164,25 @@ func (c *portServiceClient) GetUserBalance(ctx context.Context, in *common.Empty
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type PortService_GetUserBalanceClient = grpc.ServerStreamingClient[BalancePublic]
 
+func (c *portServiceClient) PnlLeaderboard(ctx context.Context, in *common.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[UserBalancesPublic], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &PortService_ServiceDesc.Streams[3], PortService_PnlLeaderboard_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[common.Empty, UserBalancesPublic]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type PortService_PnlLeaderboardClient = grpc.ServerStreamingClient[UserBalancesPublic]
+
 func (c *portServiceClient) GetAvailableLeverageLevels(ctx context.Context, in *common.ListRequest, opts ...grpc.CallOption) (*LeveragesPublic, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(LeveragesPublic)
@@ -189,6 +213,16 @@ func (c *portServiceClient) SetUserLeverage(ctx context.Context, in *SetLeverage
 	return out, nil
 }
 
+func (c *portServiceClient) DepositFunds(ctx context.Context, in *DepositRequest, opts ...grpc.CallOption) (*common.AckResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(common.AckResponse)
+	err := c.cc.Invoke(ctx, PortService_DepositFunds_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PortServiceServer is the server API for PortService service.
 // All implementations must embed UnimplementedPortServiceServer
 // for forward compatibility.
@@ -201,9 +235,12 @@ type PortServiceServer interface {
 	GetUserTrades(context.Context, *common.ListRequest) (*TradesPublic, error)
 	GetUserPositions(*common.Empty, grpc.ServerStreamingServer[PositionsPublic]) error
 	GetUserBalance(*common.Empty, grpc.ServerStreamingServer[BalancePublic]) error
+	PnlLeaderboard(*common.Empty, grpc.ServerStreamingServer[UserBalancesPublic]) error
 	GetAvailableLeverageLevels(context.Context, *common.ListRequest) (*LeveragesPublic, error)
 	GetUserLeverage(context.Context, *common.ListRequest) (*LeveragesPublic, error)
 	SetUserLeverage(context.Context, *SetLeverageRequest) (*common.AckResponse, error)
+	// Superuser methods. These require superuser privileges.
+	DepositFunds(context.Context, *DepositRequest) (*common.AckResponse, error)
 	mustEmbedUnimplementedPortServiceServer()
 }
 
@@ -238,6 +275,9 @@ func (UnimplementedPortServiceServer) GetUserPositions(*common.Empty, grpc.Serve
 func (UnimplementedPortServiceServer) GetUserBalance(*common.Empty, grpc.ServerStreamingServer[BalancePublic]) error {
 	return status.Errorf(codes.Unimplemented, "method GetUserBalance not implemented")
 }
+func (UnimplementedPortServiceServer) PnlLeaderboard(*common.Empty, grpc.ServerStreamingServer[UserBalancesPublic]) error {
+	return status.Errorf(codes.Unimplemented, "method PnlLeaderboard not implemented")
+}
 func (UnimplementedPortServiceServer) GetAvailableLeverageLevels(context.Context, *common.ListRequest) (*LeveragesPublic, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAvailableLeverageLevels not implemented")
 }
@@ -246,6 +286,9 @@ func (UnimplementedPortServiceServer) GetUserLeverage(context.Context, *common.L
 }
 func (UnimplementedPortServiceServer) SetUserLeverage(context.Context, *SetLeverageRequest) (*common.AckResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetUserLeverage not implemented")
+}
+func (UnimplementedPortServiceServer) DepositFunds(context.Context, *DepositRequest) (*common.AckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DepositFunds not implemented")
 }
 func (UnimplementedPortServiceServer) mustEmbedUnimplementedPortServiceServer() {}
 func (UnimplementedPortServiceServer) testEmbeddedByValue()                     {}
@@ -387,6 +430,17 @@ func _PortService_GetUserBalance_Handler(srv interface{}, stream grpc.ServerStre
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type PortService_GetUserBalanceServer = grpc.ServerStreamingServer[BalancePublic]
 
+func _PortService_PnlLeaderboard_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(common.Empty)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(PortServiceServer).PnlLeaderboard(m, &grpc.GenericServerStream[common.Empty, UserBalancesPublic]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type PortService_PnlLeaderboardServer = grpc.ServerStreamingServer[UserBalancesPublic]
+
 func _PortService_GetAvailableLeverageLevels_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(common.ListRequest)
 	if err := dec(in); err != nil {
@@ -441,6 +495,24 @@ func _PortService_SetUserLeverage_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PortService_DepositFunds_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DepositRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PortServiceServer).DepositFunds(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PortService_DepositFunds_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PortServiceServer).DepositFunds(ctx, req.(*DepositRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PortService_ServiceDesc is the grpc.ServiceDesc for PortService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -480,6 +552,10 @@ var PortService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "SetUserLeverage",
 			Handler:    _PortService_SetUserLeverage_Handler,
 		},
+		{
+			MethodName: "DepositFunds",
+			Handler:    _PortService_DepositFunds_Handler,
+		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
@@ -496,6 +572,11 @@ var PortService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "GetUserBalance",
 			Handler:       _PortService_GetUserBalance_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "PnlLeaderboard",
+			Handler:       _PortService_PnlLeaderboard_Handler,
 			ServerStreams: true,
 		},
 	},

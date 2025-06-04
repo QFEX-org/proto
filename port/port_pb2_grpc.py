@@ -75,6 +75,11 @@ class PortServiceStub(object):
                 request_serializer=common__pb2.Empty.SerializeToString,
                 response_deserializer=port__pb2.BalancePublic.FromString,
                 _registered_method=True)
+        self.PnlLeaderboard = channel.unary_stream(
+                '/port.PortService/PnlLeaderboard',
+                request_serializer=common__pb2.Empty.SerializeToString,
+                response_deserializer=port__pb2.UserBalancesPublic.FromString,
+                _registered_method=True)
         self.GetAvailableLeverageLevels = channel.unary_unary(
                 '/port.PortService/GetAvailableLeverageLevels',
                 request_serializer=common__pb2.ListRequest.SerializeToString,
@@ -88,6 +93,11 @@ class PortServiceStub(object):
         self.SetUserLeverage = channel.unary_unary(
                 '/port.PortService/SetUserLeverage',
                 request_serializer=port__pb2.SetLeverageRequest.SerializeToString,
+                response_deserializer=common__pb2.AckResponse.FromString,
+                _registered_method=True)
+        self.DepositFunds = channel.unary_unary(
+                '/port.PortService/DepositFunds',
+                request_serializer=port__pb2.DepositRequest.SerializeToString,
                 response_deserializer=common__pb2.AckResponse.FromString,
                 _registered_method=True)
 
@@ -143,6 +153,12 @@ class PortServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def PnlLeaderboard(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def GetAvailableLeverageLevels(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -157,6 +173,13 @@ class PortServiceServicer(object):
 
     def SetUserLeverage(self, request, context):
         """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DepositFunds(self, request, context):
+        """Superuser methods. These require superuser privileges.
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -204,6 +227,11 @@ def add_PortServiceServicer_to_server(servicer, server):
                     request_deserializer=common__pb2.Empty.FromString,
                     response_serializer=port__pb2.BalancePublic.SerializeToString,
             ),
+            'PnlLeaderboard': grpc.unary_stream_rpc_method_handler(
+                    servicer.PnlLeaderboard,
+                    request_deserializer=common__pb2.Empty.FromString,
+                    response_serializer=port__pb2.UserBalancesPublic.SerializeToString,
+            ),
             'GetAvailableLeverageLevels': grpc.unary_unary_rpc_method_handler(
                     servicer.GetAvailableLeverageLevels,
                     request_deserializer=common__pb2.ListRequest.FromString,
@@ -217,6 +245,11 @@ def add_PortServiceServicer_to_server(servicer, server):
             'SetUserLeverage': grpc.unary_unary_rpc_method_handler(
                     servicer.SetUserLeverage,
                     request_deserializer=port__pb2.SetLeverageRequest.FromString,
+                    response_serializer=common__pb2.AckResponse.SerializeToString,
+            ),
+            'DepositFunds': grpc.unary_unary_rpc_method_handler(
+                    servicer.DepositFunds,
+                    request_deserializer=port__pb2.DepositRequest.FromString,
                     response_serializer=common__pb2.AckResponse.SerializeToString,
             ),
     }
@@ -447,6 +480,33 @@ class PortService(object):
             _registered_method=True)
 
     @staticmethod
+    def PnlLeaderboard(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            '/port.PortService/PnlLeaderboard',
+            common__pb2.Empty.SerializeToString,
+            port__pb2.UserBalancesPublic.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
     def GetAvailableLeverageLevels(request,
             target,
             options=(),
@@ -516,6 +576,33 @@ class PortService(object):
             target,
             '/port.PortService/SetUserLeverage',
             port__pb2.SetLeverageRequest.SerializeToString,
+            common__pb2.AckResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def DepositFunds(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/port.PortService/DepositFunds',
+            port__pb2.DepositRequest.SerializeToString,
             common__pb2.AckResponse.FromString,
             options,
             channel_credentials,
