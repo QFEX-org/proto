@@ -66,7 +66,7 @@ enum OrderStatus {
     REJECTED_WOULD_BREACH_MAX_POSITION = 70;    // Would breach max position. Check the max position for your account in gRPC PortService.GetUserLeverage.
     CANNOT_MODIFY_NO_SUCH_ORDER = 71;           // Failed to modify this order. Order does not exist.
     REJECTED_MARKET_CLOSED = 72;                // QFEX is currently not accepting orders for this symbol.
-    RATE_LIMITED = 97;                          // You have sent too many requests to trade.pfex.io. Please contact support@qfex.com to raise your limits.
+    RATE_LIMITED = 97;                          // You have sent too many requests to trade.qfex.com. Please contact support@qfex.com to raise your limits.
 }
 
 message AckResponse {
@@ -235,4 +235,24 @@ message CandleInternal {
     uint64 close = 6;
     uint64 volume = 7;
     uint64 period = 8; // in seconds
+}
+
+message DayMarketHours {
+    string open = 1;
+    string close = 2;
+}
+
+message MarketHours {
+    string tz = 1;
+    DayMarketHours monday = 2;
+    DayMarketHours tuesday = 3;
+    DayMarketHours wednesday = 4;
+    DayMarketHours thursday = 5;
+    DayMarketHours friday = 6;
+    DayMarketHours saturday = 7;
+    DayMarketHours sunday = 8;
+}
+
+message SymbolRequest {
+    string symbol = 1;
 }

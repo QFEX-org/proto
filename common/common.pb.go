@@ -249,7 +249,7 @@ const (
 	OrderStatus_REJECTED_WOULD_BREACH_MAX_POSITION   OrderStatus = 70 // Would breach max position. Check the max position for your account in gRPC PortService.GetUserLeverage.
 	OrderStatus_CANNOT_MODIFY_NO_SUCH_ORDER          OrderStatus = 71 // Failed to modify this order. Order does not exist.
 	OrderStatus_REJECTED_MARKET_CLOSED               OrderStatus = 72 // QFEX is currently not accepting orders for this symbol.
-	OrderStatus_RATE_LIMITED                         OrderStatus = 97 // You have sent too many requests to trade.pfex.io. Please contact support@qfex.com to raise your limits.
+	OrderStatus_RATE_LIMITED                         OrderStatus = 97 // You have sent too many requests to trade.qfex.com. Please contact support@qfex.com to raise your limits.
 )
 
 // Enum value maps for OrderStatus.
@@ -1773,6 +1773,202 @@ func (x *CandleInternal) GetPeriod() uint64 {
 	return 0
 }
 
+type DayMarketHours struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Open          string                 `protobuf:"bytes,1,opt,name=open,proto3" json:"open,omitempty"`
+	Close         string                 `protobuf:"bytes,2,opt,name=close,proto3" json:"close,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DayMarketHours) Reset() {
+	*x = DayMarketHours{}
+	mi := &file_common_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DayMarketHours) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DayMarketHours) ProtoMessage() {}
+
+func (x *DayMarketHours) ProtoReflect() protoreflect.Message {
+	mi := &file_common_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DayMarketHours.ProtoReflect.Descriptor instead.
+func (*DayMarketHours) Descriptor() ([]byte, []int) {
+	return file_common_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *DayMarketHours) GetOpen() string {
+	if x != nil {
+		return x.Open
+	}
+	return ""
+}
+
+func (x *DayMarketHours) GetClose() string {
+	if x != nil {
+		return x.Close
+	}
+	return ""
+}
+
+type MarketHours struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Tz            string                 `protobuf:"bytes,1,opt,name=tz,proto3" json:"tz,omitempty"`
+	Monday        *DayMarketHours        `protobuf:"bytes,2,opt,name=monday,proto3" json:"monday,omitempty"`
+	Tuesday       *DayMarketHours        `protobuf:"bytes,3,opt,name=tuesday,proto3" json:"tuesday,omitempty"`
+	Wednesday     *DayMarketHours        `protobuf:"bytes,4,opt,name=wednesday,proto3" json:"wednesday,omitempty"`
+	Thursday      *DayMarketHours        `protobuf:"bytes,5,opt,name=thursday,proto3" json:"thursday,omitempty"`
+	Friday        *DayMarketHours        `protobuf:"bytes,6,opt,name=friday,proto3" json:"friday,omitempty"`
+	Saturday      *DayMarketHours        `protobuf:"bytes,7,opt,name=saturday,proto3" json:"saturday,omitempty"`
+	Sunday        *DayMarketHours        `protobuf:"bytes,8,opt,name=sunday,proto3" json:"sunday,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MarketHours) Reset() {
+	*x = MarketHours{}
+	mi := &file_common_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MarketHours) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MarketHours) ProtoMessage() {}
+
+func (x *MarketHours) ProtoReflect() protoreflect.Message {
+	mi := &file_common_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MarketHours.ProtoReflect.Descriptor instead.
+func (*MarketHours) Descriptor() ([]byte, []int) {
+	return file_common_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *MarketHours) GetTz() string {
+	if x != nil {
+		return x.Tz
+	}
+	return ""
+}
+
+func (x *MarketHours) GetMonday() *DayMarketHours {
+	if x != nil {
+		return x.Monday
+	}
+	return nil
+}
+
+func (x *MarketHours) GetTuesday() *DayMarketHours {
+	if x != nil {
+		return x.Tuesday
+	}
+	return nil
+}
+
+func (x *MarketHours) GetWednesday() *DayMarketHours {
+	if x != nil {
+		return x.Wednesday
+	}
+	return nil
+}
+
+func (x *MarketHours) GetThursday() *DayMarketHours {
+	if x != nil {
+		return x.Thursday
+	}
+	return nil
+}
+
+func (x *MarketHours) GetFriday() *DayMarketHours {
+	if x != nil {
+		return x.Friday
+	}
+	return nil
+}
+
+func (x *MarketHours) GetSaturday() *DayMarketHours {
+	if x != nil {
+		return x.Saturday
+	}
+	return nil
+}
+
+func (x *MarketHours) GetSunday() *DayMarketHours {
+	if x != nil {
+		return x.Sunday
+	}
+	return nil
+}
+
+type SymbolRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Symbol        string                 `protobuf:"bytes,1,opt,name=symbol,proto3" json:"symbol,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SymbolRequest) Reset() {
+	*x = SymbolRequest{}
+	mi := &file_common_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SymbolRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SymbolRequest) ProtoMessage() {}
+
+func (x *SymbolRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_common_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SymbolRequest.ProtoReflect.Descriptor instead.
+func (*SymbolRequest) Descriptor() ([]byte, []int) {
+	return file_common_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *SymbolRequest) GetSymbol() string {
+	if x != nil {
+		return x.Symbol
+	}
+	return ""
+}
+
 var File_common_proto protoreflect.FileDescriptor
 
 const file_common_proto_rawDesc = "" +
@@ -1901,7 +2097,21 @@ const file_common_proto_rawDesc = "" +
 	"\x03low\x18\x05 \x01(\x04R\x03low\x12\x14\n" +
 	"\x05close\x18\x06 \x01(\x04R\x05close\x12\x16\n" +
 	"\x06volume\x18\a \x01(\x04R\x06volume\x12\x16\n" +
-	"\x06period\x18\b \x01(\x04R\x06period*+\n" +
+	"\x06period\x18\b \x01(\x04R\x06period\":\n" +
+	"\x0eDayMarketHours\x12\x12\n" +
+	"\x04open\x18\x01 \x01(\tR\x04open\x12\x14\n" +
+	"\x05close\x18\x02 \x01(\tR\x05close\"\xfd\x02\n" +
+	"\vMarketHours\x12\x0e\n" +
+	"\x02tz\x18\x01 \x01(\tR\x02tz\x12.\n" +
+	"\x06monday\x18\x02 \x01(\v2\x16.common.DayMarketHoursR\x06monday\x120\n" +
+	"\atuesday\x18\x03 \x01(\v2\x16.common.DayMarketHoursR\atuesday\x124\n" +
+	"\twednesday\x18\x04 \x01(\v2\x16.common.DayMarketHoursR\twednesday\x122\n" +
+	"\bthursday\x18\x05 \x01(\v2\x16.common.DayMarketHoursR\bthursday\x12.\n" +
+	"\x06friday\x18\x06 \x01(\v2\x16.common.DayMarketHoursR\x06friday\x122\n" +
+	"\bsaturday\x18\a \x01(\v2\x16.common.DayMarketHoursR\bsaturday\x12.\n" +
+	"\x06sunday\x18\b \x01(\v2\x16.common.DayMarketHoursR\x06sunday\"'\n" +
+	"\rSymbolRequest\x12\x16\n" +
+	"\x06symbol\x18\x01 \x01(\tR\x06symbol*+\n" +
 	"\tOrderType\x12\t\n" +
 	"\x05LIMIT\x10\x00\x12\n" +
 	"\n" +
@@ -1978,7 +2188,7 @@ func file_common_proto_rawDescGZIP() []byte {
 }
 
 var file_common_proto_enumTypes = make([]protoimpl.EnumInfo, 7)
-var file_common_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_common_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_common_proto_goTypes = []any{
 	(OrderType)(0),                // 0: common.OrderType
 	(OrderDirection)(0),           // 1: common.OrderDirection
@@ -2003,18 +2213,21 @@ var file_common_proto_goTypes = []any{
 	(*AllOrdersResponse)(nil),     // 20: common.AllOrdersResponse
 	(*TradeVolume)(nil),           // 21: common.TradeVolume
 	(*CandleInternal)(nil),        // 22: common.CandleInternal
-	(*timestamppb.Timestamp)(nil), // 23: google.protobuf.Timestamp
+	(*DayMarketHours)(nil),        // 23: common.DayMarketHours
+	(*MarketHours)(nil),           // 24: common.MarketHours
+	(*SymbolRequest)(nil),         // 25: common.SymbolRequest
+	(*timestamppb.Timestamp)(nil), // 26: google.protobuf.Timestamp
 }
 var file_common_proto_depIdxs = []int32{
-	23, // 0: common.AckResponse.timestamp:type_name -> google.protobuf.Timestamp
-	23, // 1: common.TradePublic.order_timestamp:type_name -> google.protobuf.Timestamp
+	26, // 0: common.AckResponse.timestamp:type_name -> google.protobuf.Timestamp
+	26, // 1: common.TradePublic.order_timestamp:type_name -> google.protobuf.Timestamp
 	1,  // 2: common.TradePublic.aggressor_side:type_name -> common.OrderDirection
 	10, // 3: common.TradesPublic.trades:type_name -> common.TradePublic
-	23, // 4: common.TradesPublic.timestamp:type_name -> google.protobuf.Timestamp
-	23, // 5: common.OrderBook.timestamp:type_name -> google.protobuf.Timestamp
+	26, // 4: common.TradesPublic.timestamp:type_name -> google.protobuf.Timestamp
+	26, // 5: common.OrderBook.timestamp:type_name -> google.protobuf.Timestamp
 	14, // 6: common.OrderBook.bids:type_name -> common.OrderBookEntry
 	14, // 7: common.OrderBook.asks:type_name -> common.OrderBookEntry
-	23, // 8: common.BalancePublic.timestamp:type_name -> google.protobuf.Timestamp
+	26, // 8: common.BalancePublic.timestamp:type_name -> google.protobuf.Timestamp
 	1,  // 9: common.AppendOrderRequest.side:type_name -> common.OrderDirection
 	0,  // 10: common.AppendOrderRequest.type:type_name -> common.OrderType
 	2,  // 11: common.AppendOrderRequest.time_in_force:type_name -> common.OrderTimeInForce
@@ -2022,27 +2235,34 @@ var file_common_proto_depIdxs = []int32{
 	14, // 13: common.AppendOrderRequest.best_bid:type_name -> common.OrderBookEntry
 	14, // 14: common.AppendOrderRequest.best_ask:type_name -> common.OrderBookEntry
 	4,  // 15: common.AppendOrderRequest.order_status:type_name -> common.OrderStatus
-	23, // 16: common.AppendOrderRequest.port_ingress_entry_time:type_name -> google.protobuf.Timestamp
-	23, // 17: common.AppendOrderRequest.port_ingress_exit_time:type_name -> google.protobuf.Timestamp
-	23, // 18: common.AppendOrderRequest.user_service_ingress_entry_time:type_name -> google.protobuf.Timestamp
-	23, // 19: common.AppendOrderRequest.user_service_ingress_exit_time:type_name -> google.protobuf.Timestamp
-	23, // 20: common.AppendOrderRequest.engine_entry_time:type_name -> google.protobuf.Timestamp
-	23, // 21: common.AppendOrderRequest.engine_exit_time:type_name -> google.protobuf.Timestamp
-	23, // 22: common.AppendOrderRequest.user_service_egress_entry_time:type_name -> google.protobuf.Timestamp
-	23, // 23: common.AppendOrderRequest.user_service_egress_exit_time:type_name -> google.protobuf.Timestamp
-	23, // 24: common.AppendOrderRequest.port_egress_entry_time:type_name -> google.protobuf.Timestamp
-	23, // 25: common.AppendOrderRequest.timestamp:type_name -> google.protobuf.Timestamp
-	23, // 26: common.Underlier.timestamp:type_name -> google.protobuf.Timestamp
-	23, // 27: common.FundingRate.timestamp:type_name -> google.protobuf.Timestamp
+	26, // 16: common.AppendOrderRequest.port_ingress_entry_time:type_name -> google.protobuf.Timestamp
+	26, // 17: common.AppendOrderRequest.port_ingress_exit_time:type_name -> google.protobuf.Timestamp
+	26, // 18: common.AppendOrderRequest.user_service_ingress_entry_time:type_name -> google.protobuf.Timestamp
+	26, // 19: common.AppendOrderRequest.user_service_ingress_exit_time:type_name -> google.protobuf.Timestamp
+	26, // 20: common.AppendOrderRequest.engine_entry_time:type_name -> google.protobuf.Timestamp
+	26, // 21: common.AppendOrderRequest.engine_exit_time:type_name -> google.protobuf.Timestamp
+	26, // 22: common.AppendOrderRequest.user_service_egress_entry_time:type_name -> google.protobuf.Timestamp
+	26, // 23: common.AppendOrderRequest.user_service_egress_exit_time:type_name -> google.protobuf.Timestamp
+	26, // 24: common.AppendOrderRequest.port_egress_entry_time:type_name -> google.protobuf.Timestamp
+	26, // 25: common.AppendOrderRequest.timestamp:type_name -> google.protobuf.Timestamp
+	26, // 26: common.Underlier.timestamp:type_name -> google.protobuf.Timestamp
+	26, // 27: common.FundingRate.timestamp:type_name -> google.protobuf.Timestamp
 	17, // 28: common.AllOrdersResponse.orders:type_name -> common.AppendOrderRequest
-	23, // 29: common.AllOrdersResponse.timestamp:type_name -> google.protobuf.Timestamp
-	23, // 30: common.TradeVolume.timestamp:type_name -> google.protobuf.Timestamp
-	23, // 31: common.CandleInternal.timestamp:type_name -> google.protobuf.Timestamp
-	32, // [32:32] is the sub-list for method output_type
-	32, // [32:32] is the sub-list for method input_type
-	32, // [32:32] is the sub-list for extension type_name
-	32, // [32:32] is the sub-list for extension extendee
-	0,  // [0:32] is the sub-list for field type_name
+	26, // 29: common.AllOrdersResponse.timestamp:type_name -> google.protobuf.Timestamp
+	26, // 30: common.TradeVolume.timestamp:type_name -> google.protobuf.Timestamp
+	26, // 31: common.CandleInternal.timestamp:type_name -> google.protobuf.Timestamp
+	23, // 32: common.MarketHours.monday:type_name -> common.DayMarketHours
+	23, // 33: common.MarketHours.tuesday:type_name -> common.DayMarketHours
+	23, // 34: common.MarketHours.wednesday:type_name -> common.DayMarketHours
+	23, // 35: common.MarketHours.thursday:type_name -> common.DayMarketHours
+	23, // 36: common.MarketHours.friday:type_name -> common.DayMarketHours
+	23, // 37: common.MarketHours.saturday:type_name -> common.DayMarketHours
+	23, // 38: common.MarketHours.sunday:type_name -> common.DayMarketHours
+	39, // [39:39] is the sub-list for method output_type
+	39, // [39:39] is the sub-list for method input_type
+	39, // [39:39] is the sub-list for extension type_name
+	39, // [39:39] is the sub-list for extension extendee
+	0,  // [0:39] is the sub-list for field type_name
 }
 
 func init() { file_common_proto_init() }
@@ -2057,7 +2277,7 @@ func file_common_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_common_proto_rawDesc), len(file_common_proto_rawDesc)),
 			NumEnums:      7,
-			NumMessages:   16,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

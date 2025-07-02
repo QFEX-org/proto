@@ -220,9 +220,9 @@ type ModifyOrderRequest struct {
 	OriginalQuantity float64                `protobuf:"fixed64,3,opt,name=original_quantity,json=originalQuantity,proto3" json:"original_quantity,omitempty"` // Order quantity
 	Quantity         float64                `protobuf:"fixed64,4,opt,name=quantity,proto3" json:"quantity,omitempty"`                                         // Order quantity
 	Price            float64                `protobuf:"fixed64,5,opt,name=price,proto3" json:"price,omitempty"`                                               // Order price
-	Timestamp        *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=timestamp,proto3" json:"timestamp,omitempty"`                                         // Unix timestamp in milliseconds
-	UpdateTime       *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=update_time,json=updateTime,proto3" json:"update_time,omitempty"`                     // Unix timestamp in milliseconds
-	ClientOrderId    string                 `protobuf:"bytes,8,opt,name=client_order_id,json=clientOrderId,proto3" json:"client_order_id,omitempty"`          // not used apart from rate limited responses
+	Side             common.OrderDirection  `protobuf:"varint,6,opt,name=side,proto3,enum=common.OrderDirection" json:"side,omitempty"`
+	Timestamp        *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=timestamp,proto3" json:"timestamp,omitempty"`                     // Unix timestamp in milliseconds
+	UpdateTime       *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=update_time,json=updateTime,proto3" json:"update_time,omitempty"` // Unix timestamp in milliseconds
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -292,6 +292,13 @@ func (x *ModifyOrderRequest) GetPrice() float64 {
 	return 0
 }
 
+func (x *ModifyOrderRequest) GetSide() common.OrderDirection {
+	if x != nil {
+		return x.Side
+	}
+	return common.OrderDirection(0)
+}
+
 func (x *ModifyOrderRequest) GetTimestamp() *timestamppb.Timestamp {
 	if x != nil {
 		return x.Timestamp
@@ -304,13 +311,6 @@ func (x *ModifyOrderRequest) GetUpdateTime() *timestamppb.Timestamp {
 		return x.UpdateTime
 	}
 	return nil
-}
-
-func (x *ModifyOrderRequest) GetClientOrderId() string {
-	if x != nil {
-		return x.ClientOrderId
-	}
-	return ""
 }
 
 type GetOrderRequest struct {
@@ -1455,17 +1455,17 @@ const file_port_proto_rawDesc = "" +
 	"\border_id\x18\x01 \x01(\tH\x00R\aorderId\x12(\n" +
 	"\x0fclient_order_id\x18\x02 \x01(\tH\x00R\rclientOrderId\x12\x16\n" +
 	"\x06symbol\x18\x03 \x01(\tR\x06symbolB\x11\n" +
-	"\x0forder_id_choice\"\xc5\x02\n" +
+	"\x0forder_id_choice\"\xc9\x02\n" +
 	"\x12ModifyOrderRequest\x12\x16\n" +
 	"\x06symbol\x18\x01 \x01(\tR\x06symbol\x12\x19\n" +
 	"\border_id\x18\x02 \x01(\tR\aorderId\x12+\n" +
 	"\x11original_quantity\x18\x03 \x01(\x01R\x10originalQuantity\x12\x1a\n" +
 	"\bquantity\x18\x04 \x01(\x01R\bquantity\x12\x14\n" +
-	"\x05price\x18\x05 \x01(\x01R\x05price\x128\n" +
-	"\ttimestamp\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\x12;\n" +
-	"\vupdate_time\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\n" +
-	"updateTime\x12&\n" +
-	"\x0fclient_order_id\x18\b \x01(\tR\rclientOrderId\"~\n" +
+	"\x05price\x18\x05 \x01(\x01R\x05price\x12*\n" +
+	"\x04side\x18\x06 \x01(\x0e2\x16.common.OrderDirectionR\x04side\x128\n" +
+	"\ttimestamp\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\x12;\n" +
+	"\vupdate_time\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\n" +
+	"updateTime\"~\n" +
 	"\x0fGetOrderRequest\x12\x19\n" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x12\x16\n" +
 	"\x06symbol\x18\x02 \x01(\tR\x06symbol\x128\n" +
@@ -1624,57 +1624,58 @@ var file_port_proto_depIdxs = []int32{
 	17, // 1: port.AddOrderRequest.type:type_name -> common.OrderType
 	18, // 2: port.AddOrderRequest.time_in_force:type_name -> common.OrderTimeInForce
 	19, // 3: port.AddOrderRequest.timestamp:type_name -> google.protobuf.Timestamp
-	19, // 4: port.ModifyOrderRequest.timestamp:type_name -> google.protobuf.Timestamp
-	19, // 5: port.ModifyOrderRequest.update_time:type_name -> google.protobuf.Timestamp
-	19, // 6: port.GetOrderRequest.timestamp:type_name -> google.protobuf.Timestamp
-	19, // 7: port.SetLeverageRequest.timestamp:type_name -> google.protobuf.Timestamp
-	6,  // 8: port.LeveragesPublic.leverages:type_name -> port.LeveragePublic
-	19, // 9: port.LeveragesPublic.timestamp:type_name -> google.protobuf.Timestamp
-	20, // 10: port.OrderResponse.status:type_name -> common.OrderStatus
-	16, // 11: port.OrderResponse.side:type_name -> common.OrderDirection
-	17, // 12: port.OrderResponse.type:type_name -> common.OrderType
-	18, // 13: port.OrderResponse.time_in_force:type_name -> common.OrderTimeInForce
-	19, // 14: port.OrderResponse.update_time:type_name -> google.protobuf.Timestamp
-	7,  // 15: port.AllOrdersResponse.orders:type_name -> port.OrderResponse
-	19, // 16: port.AllOrdersResponse.timestamp:type_name -> google.protobuf.Timestamp
-	19, // 17: port.TradePublic.order_timestamp:type_name -> google.protobuf.Timestamp
-	16, // 18: port.TradePublic.aggressor_side:type_name -> common.OrderDirection
-	9,  // 19: port.TradesPublic.trades:type_name -> port.TradePublic
-	19, // 20: port.TradesPublic.timestamp:type_name -> google.protobuf.Timestamp
-	19, // 21: port.PositionPublic.timestamp:type_name -> google.protobuf.Timestamp
-	11, // 22: port.PositionsPublic.data:type_name -> port.PositionPublic
-	19, // 23: port.PositionsPublic.timestamp:type_name -> google.protobuf.Timestamp
-	19, // 24: port.BalancePublic.timestamp:type_name -> google.protobuf.Timestamp
-	0,  // 25: port.OrdersStreamRequest.add_order:type_name -> port.AddOrderRequest
-	1,  // 26: port.OrdersStreamRequest.cancel_order:type_name -> port.CancelOrderRequest
-	2,  // 27: port.OrdersStreamRequest.modify_order:type_name -> port.ModifyOrderRequest
-	14, // 28: port.PortService.StreamOrders:input_type -> port.OrdersStreamRequest
-	3,  // 29: port.PortService.GetOrder:input_type -> port.GetOrderRequest
-	21, // 30: port.PortService.GetUserOrders:input_type -> common.ListRequest
-	15, // 31: port.PortService.CancelAllOrders:input_type -> port.CancelAllOrdersRequest
-	22, // 32: port.PortService.ReloadUsers:input_type -> common.Empty
-	21, // 33: port.PortService.GetUserTrades:input_type -> common.ListRequest
-	22, // 34: port.PortService.GetUserPositions:input_type -> common.Empty
-	22, // 35: port.PortService.GetUserBalance:input_type -> common.Empty
-	21, // 36: port.PortService.GetAvailableLeverageLevels:input_type -> common.ListRequest
-	21, // 37: port.PortService.GetUserLeverage:input_type -> common.ListRequest
-	4,  // 38: port.PortService.SetUserLeverage:input_type -> port.SetLeverageRequest
-	7,  // 39: port.PortService.StreamOrders:output_type -> port.OrderResponse
-	7,  // 40: port.PortService.GetOrder:output_type -> port.OrderResponse
-	8,  // 41: port.PortService.GetUserOrders:output_type -> port.AllOrdersResponse
-	23, // 42: port.PortService.CancelAllOrders:output_type -> common.AckResponse
-	23, // 43: port.PortService.ReloadUsers:output_type -> common.AckResponse
-	10, // 44: port.PortService.GetUserTrades:output_type -> port.TradesPublic
-	12, // 45: port.PortService.GetUserPositions:output_type -> port.PositionsPublic
-	13, // 46: port.PortService.GetUserBalance:output_type -> port.BalancePublic
-	5,  // 47: port.PortService.GetAvailableLeverageLevels:output_type -> port.LeveragesPublic
-	5,  // 48: port.PortService.GetUserLeverage:output_type -> port.LeveragesPublic
-	23, // 49: port.PortService.SetUserLeverage:output_type -> common.AckResponse
-	39, // [39:50] is the sub-list for method output_type
-	28, // [28:39] is the sub-list for method input_type
-	28, // [28:28] is the sub-list for extension type_name
-	28, // [28:28] is the sub-list for extension extendee
-	0,  // [0:28] is the sub-list for field type_name
+	16, // 4: port.ModifyOrderRequest.side:type_name -> common.OrderDirection
+	19, // 5: port.ModifyOrderRequest.timestamp:type_name -> google.protobuf.Timestamp
+	19, // 6: port.ModifyOrderRequest.update_time:type_name -> google.protobuf.Timestamp
+	19, // 7: port.GetOrderRequest.timestamp:type_name -> google.protobuf.Timestamp
+	19, // 8: port.SetLeverageRequest.timestamp:type_name -> google.protobuf.Timestamp
+	6,  // 9: port.LeveragesPublic.leverages:type_name -> port.LeveragePublic
+	19, // 10: port.LeveragesPublic.timestamp:type_name -> google.protobuf.Timestamp
+	20, // 11: port.OrderResponse.status:type_name -> common.OrderStatus
+	16, // 12: port.OrderResponse.side:type_name -> common.OrderDirection
+	17, // 13: port.OrderResponse.type:type_name -> common.OrderType
+	18, // 14: port.OrderResponse.time_in_force:type_name -> common.OrderTimeInForce
+	19, // 15: port.OrderResponse.update_time:type_name -> google.protobuf.Timestamp
+	7,  // 16: port.AllOrdersResponse.orders:type_name -> port.OrderResponse
+	19, // 17: port.AllOrdersResponse.timestamp:type_name -> google.protobuf.Timestamp
+	19, // 18: port.TradePublic.order_timestamp:type_name -> google.protobuf.Timestamp
+	16, // 19: port.TradePublic.aggressor_side:type_name -> common.OrderDirection
+	9,  // 20: port.TradesPublic.trades:type_name -> port.TradePublic
+	19, // 21: port.TradesPublic.timestamp:type_name -> google.protobuf.Timestamp
+	19, // 22: port.PositionPublic.timestamp:type_name -> google.protobuf.Timestamp
+	11, // 23: port.PositionsPublic.data:type_name -> port.PositionPublic
+	19, // 24: port.PositionsPublic.timestamp:type_name -> google.protobuf.Timestamp
+	19, // 25: port.BalancePublic.timestamp:type_name -> google.protobuf.Timestamp
+	0,  // 26: port.OrdersStreamRequest.add_order:type_name -> port.AddOrderRequest
+	1,  // 27: port.OrdersStreamRequest.cancel_order:type_name -> port.CancelOrderRequest
+	2,  // 28: port.OrdersStreamRequest.modify_order:type_name -> port.ModifyOrderRequest
+	14, // 29: port.PortService.StreamOrders:input_type -> port.OrdersStreamRequest
+	3,  // 30: port.PortService.GetOrder:input_type -> port.GetOrderRequest
+	21, // 31: port.PortService.GetUserOrders:input_type -> common.ListRequest
+	15, // 32: port.PortService.CancelAllOrders:input_type -> port.CancelAllOrdersRequest
+	22, // 33: port.PortService.ReloadUsers:input_type -> common.Empty
+	21, // 34: port.PortService.GetUserTrades:input_type -> common.ListRequest
+	22, // 35: port.PortService.GetUserPositions:input_type -> common.Empty
+	22, // 36: port.PortService.GetUserBalance:input_type -> common.Empty
+	21, // 37: port.PortService.GetAvailableLeverageLevels:input_type -> common.ListRequest
+	21, // 38: port.PortService.GetUserLeverage:input_type -> common.ListRequest
+	4,  // 39: port.PortService.SetUserLeverage:input_type -> port.SetLeverageRequest
+	7,  // 40: port.PortService.StreamOrders:output_type -> port.OrderResponse
+	7,  // 41: port.PortService.GetOrder:output_type -> port.OrderResponse
+	8,  // 42: port.PortService.GetUserOrders:output_type -> port.AllOrdersResponse
+	23, // 43: port.PortService.CancelAllOrders:output_type -> common.AckResponse
+	23, // 44: port.PortService.ReloadUsers:output_type -> common.AckResponse
+	10, // 45: port.PortService.GetUserTrades:output_type -> port.TradesPublic
+	12, // 46: port.PortService.GetUserPositions:output_type -> port.PositionsPublic
+	13, // 47: port.PortService.GetUserBalance:output_type -> port.BalancePublic
+	5,  // 48: port.PortService.GetAvailableLeverageLevels:output_type -> port.LeveragesPublic
+	5,  // 49: port.PortService.GetUserLeverage:output_type -> port.LeveragesPublic
+	23, // 50: port.PortService.SetUserLeverage:output_type -> common.AckResponse
+	40, // [40:51] is the sub-list for method output_type
+	29, // [29:40] is the sub-list for method input_type
+	29, // [29:29] is the sub-list for extension type_name
+	29, // [29:29] is the sub-list for extension extendee
+	0,  // [0:29] is the sub-list for field type_name
 }
 
 func init() { file_port_proto_init() }

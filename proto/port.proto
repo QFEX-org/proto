@@ -52,9 +52,9 @@ message ModifyOrderRequest {
     double original_quantity = 3;         // Order quantity
     double quantity = 4;         // Order quantity
     double price = 5;            // Order price
-    google.protobuf.Timestamp timestamp = 6;        // Unix timestamp in milliseconds
-    google.protobuf.Timestamp update_time = 7;        // Unix timestamp in milliseconds
-    string client_order_id = 8; // not used apart from rate limited responses
+    common.OrderDirection side = 6;
+    google.protobuf.Timestamp timestamp = 7;        // Unix timestamp in milliseconds
+    google.protobuf.Timestamp update_time = 8;        // Unix timestamp in milliseconds
 }
 
 message GetOrderRequest {
@@ -163,7 +163,7 @@ message BalancePublic {
     float net_funding = 8;  
     float available_balance = 9;
     google.protobuf.Timestamp timestamp = 99;
-  }
+}
 
 message OrdersStreamRequest {
     oneof request_type {
@@ -172,7 +172,6 @@ message OrdersStreamRequest {
         ModifyOrderRequest modify_order = 3;
     }   
 }
-
 
 message CancelAllOrdersRequest {
     repeated string symbols = 1;

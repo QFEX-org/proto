@@ -459,158 +459,6 @@ func (x *FundingRate) GetTimestamp() *timestamppb.Timestamp {
 	return nil
 }
 
-type DayMarketHours struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Open          string                 `protobuf:"bytes,1,opt,name=open,proto3" json:"open,omitempty"`
-	Close         string                 `protobuf:"bytes,2,opt,name=close,proto3" json:"close,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *DayMarketHours) Reset() {
-	*x = DayMarketHours{}
-	mi := &file_market_data_proto_msgTypes[7]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *DayMarketHours) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DayMarketHours) ProtoMessage() {}
-
-func (x *DayMarketHours) ProtoReflect() protoreflect.Message {
-	mi := &file_market_data_proto_msgTypes[7]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DayMarketHours.ProtoReflect.Descriptor instead.
-func (*DayMarketHours) Descriptor() ([]byte, []int) {
-	return file_market_data_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *DayMarketHours) GetOpen() string {
-	if x != nil {
-		return x.Open
-	}
-	return ""
-}
-
-func (x *DayMarketHours) GetClose() string {
-	if x != nil {
-		return x.Close
-	}
-	return ""
-}
-
-type MarketHours struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Tz            string                 `protobuf:"bytes,1,opt,name=tz,proto3" json:"tz,omitempty"`
-	Monday        *DayMarketHours        `protobuf:"bytes,2,opt,name=monday,proto3" json:"monday,omitempty"`
-	Tuesday       *DayMarketHours        `protobuf:"bytes,3,opt,name=tuesday,proto3" json:"tuesday,omitempty"`
-	Wednesday     *DayMarketHours        `protobuf:"bytes,4,opt,name=wednesday,proto3" json:"wednesday,omitempty"`
-	Thursday      *DayMarketHours        `protobuf:"bytes,5,opt,name=thursday,proto3" json:"thursday,omitempty"`
-	Friday        *DayMarketHours        `protobuf:"bytes,6,opt,name=friday,proto3" json:"friday,omitempty"`
-	Saturday      *DayMarketHours        `protobuf:"bytes,7,opt,name=saturday,proto3" json:"saturday,omitempty"`
-	Sunday        *DayMarketHours        `protobuf:"bytes,8,opt,name=sunday,proto3" json:"sunday,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *MarketHours) Reset() {
-	*x = MarketHours{}
-	mi := &file_market_data_proto_msgTypes[8]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *MarketHours) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*MarketHours) ProtoMessage() {}
-
-func (x *MarketHours) ProtoReflect() protoreflect.Message {
-	mi := &file_market_data_proto_msgTypes[8]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use MarketHours.ProtoReflect.Descriptor instead.
-func (*MarketHours) Descriptor() ([]byte, []int) {
-	return file_market_data_proto_rawDescGZIP(), []int{8}
-}
-
-func (x *MarketHours) GetTz() string {
-	if x != nil {
-		return x.Tz
-	}
-	return ""
-}
-
-func (x *MarketHours) GetMonday() *DayMarketHours {
-	if x != nil {
-		return x.Monday
-	}
-	return nil
-}
-
-func (x *MarketHours) GetTuesday() *DayMarketHours {
-	if x != nil {
-		return x.Tuesday
-	}
-	return nil
-}
-
-func (x *MarketHours) GetWednesday() *DayMarketHours {
-	if x != nil {
-		return x.Wednesday
-	}
-	return nil
-}
-
-func (x *MarketHours) GetThursday() *DayMarketHours {
-	if x != nil {
-		return x.Thursday
-	}
-	return nil
-}
-
-func (x *MarketHours) GetFriday() *DayMarketHours {
-	if x != nil {
-		return x.Friday
-	}
-	return nil
-}
-
-func (x *MarketHours) GetSaturday() *DayMarketHours {
-	if x != nil {
-		return x.Saturday
-	}
-	return nil
-}
-
-func (x *MarketHours) GetSunday() *DayMarketHours {
-	if x != nil {
-		return x.Sunday
-	}
-	return nil
-}
-
 type SymbolRefData struct {
 	state            protoimpl.MessageState    `protogen:"open.v1"`
 	ClobPairId       string                    `protobuf:"bytes,1,opt,name=clobPairId,proto3" json:"clobPairId,omitempty"`
@@ -632,14 +480,14 @@ type SymbolRefData struct {
 	MarginAsset      string                    `protobuf:"bytes,19,opt,name=margin_asset,json=marginAsset,proto3" json:"margin_asset,omitempty"`
 	OrderTimeInForce []common.OrderTimeInForce `protobuf:"varint,20,rep,packed,name=order_time_in_force,json=orderTimeInForce,proto3,enum=common.OrderTimeInForce" json:"order_time_in_force,omitempty"`
 	OrderTypes       []common.OrderType        `protobuf:"varint,21,rep,packed,name=order_types,json=orderTypes,proto3,enum=common.OrderType" json:"order_types,omitempty"`
-	MarketHours      *MarketHours              `protobuf:"bytes,22,opt,name=market_hours,json=marketHours,proto3" json:"market_hours,omitempty"` // New field for market hours
+	MarketHours      *common.MarketHours       `protobuf:"bytes,22,opt,name=market_hours,json=marketHours,proto3" json:"market_hours,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
 
 func (x *SymbolRefData) Reset() {
 	*x = SymbolRefData{}
-	mi := &file_market_data_proto_msgTypes[9]
+	mi := &file_market_data_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -651,7 +499,7 @@ func (x *SymbolRefData) String() string {
 func (*SymbolRefData) ProtoMessage() {}
 
 func (x *SymbolRefData) ProtoReflect() protoreflect.Message {
-	mi := &file_market_data_proto_msgTypes[9]
+	mi := &file_market_data_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -664,7 +512,7 @@ func (x *SymbolRefData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SymbolRefData.ProtoReflect.Descriptor instead.
 func (*SymbolRefData) Descriptor() ([]byte, []int) {
-	return file_market_data_proto_rawDescGZIP(), []int{9}
+	return file_market_data_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *SymbolRefData) GetClobPairId() string {
@@ -800,7 +648,7 @@ func (x *SymbolRefData) GetOrderTypes() []common.OrderType {
 	return nil
 }
 
-func (x *SymbolRefData) GetMarketHours() *MarketHours {
+func (x *SymbolRefData) GetMarketHours() *common.MarketHours {
 	if x != nil {
 		return x.MarketHours
 	}
@@ -817,7 +665,7 @@ type RefData struct {
 
 func (x *RefData) Reset() {
 	*x = RefData{}
-	mi := &file_market_data_proto_msgTypes[10]
+	mi := &file_market_data_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -829,7 +677,7 @@ func (x *RefData) String() string {
 func (*RefData) ProtoMessage() {}
 
 func (x *RefData) ProtoReflect() protoreflect.Message {
-	mi := &file_market_data_proto_msgTypes[10]
+	mi := &file_market_data_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -842,7 +690,7 @@ func (x *RefData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RefData.ProtoReflect.Descriptor instead.
 func (*RefData) Descriptor() ([]byte, []int) {
-	return file_market_data_proto_rawDescGZIP(), []int{10}
+	return file_market_data_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *RefData) GetSymbols() []*SymbolRefData {
@@ -875,7 +723,7 @@ type Candle struct {
 
 func (x *Candle) Reset() {
 	*x = Candle{}
-	mi := &file_market_data_proto_msgTypes[11]
+	mi := &file_market_data_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -887,7 +735,7 @@ func (x *Candle) String() string {
 func (*Candle) ProtoMessage() {}
 
 func (x *Candle) ProtoReflect() protoreflect.Message {
-	mi := &file_market_data_proto_msgTypes[11]
+	mi := &file_market_data_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -900,7 +748,7 @@ func (x *Candle) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Candle.ProtoReflect.Descriptor instead.
 func (*Candle) Descriptor() ([]byte, []int) {
-	return file_market_data_proto_rawDescGZIP(), []int{11}
+	return file_market_data_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *Candle) GetSymbol() string {
@@ -993,19 +841,7 @@ const file_market_data_proto_rawDesc = "" +
 	"\x06symbol\x18\x01 \x01(\tR\x06symbol\x12\x12\n" +
 	"\x04rate\x18\x02 \x01(\x01R\x04rate\x124\n" +
 	"\x16time_remaining_seconds\x18\x03 \x01(\x04R\x14timeRemainingSeconds\x128\n" +
-	"\ttimestamp\x18c \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\":\n" +
-	"\x0eDayMarketHours\x12\x12\n" +
-	"\x04open\x18\x01 \x01(\tR\x04open\x12\x14\n" +
-	"\x05close\x18\x02 \x01(\tR\x05close\"\xa0\x03\n" +
-	"\vMarketHours\x12\x0e\n" +
-	"\x02tz\x18\x01 \x01(\tR\x02tz\x123\n" +
-	"\x06monday\x18\x02 \x01(\v2\x1b.market_data.DayMarketHoursR\x06monday\x125\n" +
-	"\atuesday\x18\x03 \x01(\v2\x1b.market_data.DayMarketHoursR\atuesday\x129\n" +
-	"\twednesday\x18\x04 \x01(\v2\x1b.market_data.DayMarketHoursR\twednesday\x127\n" +
-	"\bthursday\x18\x05 \x01(\v2\x1b.market_data.DayMarketHoursR\bthursday\x123\n" +
-	"\x06friday\x18\x06 \x01(\v2\x1b.market_data.DayMarketHoursR\x06friday\x127\n" +
-	"\bsaturday\x18\a \x01(\v2\x1b.market_data.DayMarketHoursR\bsaturday\x123\n" +
-	"\x06sunday\x18\b \x01(\v2\x1b.market_data.DayMarketHoursR\x06sunday\"\x87\x06\n" +
+	"\ttimestamp\x18c \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\"\x82\x06\n" +
 	"\rSymbolRefData\x12\x1e\n" +
 	"\n" +
 	"clobPairId\x18\x01 \x01(\tR\n" +
@@ -1032,8 +868,8 @@ const file_market_data_proto_rawDesc = "" +
 	"\fmargin_asset\x18\x13 \x01(\tR\vmarginAsset\x12G\n" +
 	"\x13order_time_in_force\x18\x14 \x03(\x0e2\x18.common.OrderTimeInForceR\x10orderTimeInForce\x122\n" +
 	"\vorder_types\x18\x15 \x03(\x0e2\x11.common.OrderTypeR\n" +
-	"orderTypes\x12;\n" +
-	"\fmarket_hours\x18\x16 \x01(\v2\x18.market_data.MarketHoursR\vmarketHours\"y\n" +
+	"orderTypes\x126\n" +
+	"\fmarket_hours\x18\x16 \x01(\v2\x13.common.MarketHoursR\vmarketHours\"y\n" +
 	"\aRefData\x124\n" +
 	"\asymbols\x18\x01 \x03(\v2\x1a.market_data.SymbolRefDataR\asymbols\x128\n" +
 	"\ttimestamp\x18c \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\"\xda\x01\n" +
@@ -1069,7 +905,7 @@ func file_market_data_proto_rawDescGZIP() []byte {
 	return file_market_data_proto_rawDescData
 }
 
-var file_market_data_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_market_data_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_market_data_proto_goTypes = []any{
 	(*GetSymbol)(nil),             // 0: market_data.GetSymbol
 	(*GetCandle)(nil),             // 1: market_data.GetCandle
@@ -1078,61 +914,53 @@ var file_market_data_proto_goTypes = []any{
 	(*Trade)(nil),                 // 4: market_data.Trade
 	(*Underlier)(nil),             // 5: market_data.Underlier
 	(*FundingRate)(nil),           // 6: market_data.FundingRate
-	(*DayMarketHours)(nil),        // 7: market_data.DayMarketHours
-	(*MarketHours)(nil),           // 8: market_data.MarketHours
-	(*SymbolRefData)(nil),         // 9: market_data.SymbolRefData
-	(*RefData)(nil),               // 10: market_data.RefData
-	(*Candle)(nil),                // 11: market_data.Candle
-	(common.CandlesInterval)(0),   // 12: common.CandlesInterval
-	(*timestamppb.Timestamp)(nil), // 13: google.protobuf.Timestamp
-	(common.OrderDirection)(0),    // 14: common.OrderDirection
-	(common.SymbolStatus)(0),      // 15: common.SymbolStatus
-	(common.OrderTimeInForce)(0),  // 16: common.OrderTimeInForce
-	(common.OrderType)(0),         // 17: common.OrderType
-	(*common.Empty)(nil),          // 18: common.Empty
+	(*SymbolRefData)(nil),         // 7: market_data.SymbolRefData
+	(*RefData)(nil),               // 8: market_data.RefData
+	(*Candle)(nil),                // 9: market_data.Candle
+	(common.CandlesInterval)(0),   // 10: common.CandlesInterval
+	(*timestamppb.Timestamp)(nil), // 11: google.protobuf.Timestamp
+	(common.OrderDirection)(0),    // 12: common.OrderDirection
+	(common.SymbolStatus)(0),      // 13: common.SymbolStatus
+	(common.OrderTimeInForce)(0),  // 14: common.OrderTimeInForce
+	(common.OrderType)(0),         // 15: common.OrderType
+	(*common.MarketHours)(nil),    // 16: common.MarketHours
+	(*common.Empty)(nil),          // 17: common.Empty
 }
 var file_market_data_proto_depIdxs = []int32{
-	12, // 0: market_data.GetCandle.interval:type_name -> common.CandlesInterval
-	13, // 1: market_data.OrderBook.timestamp:type_name -> google.protobuf.Timestamp
+	10, // 0: market_data.GetCandle.interval:type_name -> common.CandlesInterval
+	11, // 1: market_data.OrderBook.timestamp:type_name -> google.protobuf.Timestamp
 	2,  // 2: market_data.OrderBook.bids:type_name -> market_data.OrderBookEntry
 	2,  // 3: market_data.OrderBook.asks:type_name -> market_data.OrderBookEntry
-	13, // 4: market_data.Trade.trade_timestamp:type_name -> google.protobuf.Timestamp
-	14, // 5: market_data.Trade.aggressor_side:type_name -> common.OrderDirection
-	13, // 6: market_data.Underlier.timestamp:type_name -> google.protobuf.Timestamp
-	13, // 7: market_data.FundingRate.timestamp:type_name -> google.protobuf.Timestamp
-	7,  // 8: market_data.MarketHours.monday:type_name -> market_data.DayMarketHours
-	7,  // 9: market_data.MarketHours.tuesday:type_name -> market_data.DayMarketHours
-	7,  // 10: market_data.MarketHours.wednesday:type_name -> market_data.DayMarketHours
-	7,  // 11: market_data.MarketHours.thursday:type_name -> market_data.DayMarketHours
-	7,  // 12: market_data.MarketHours.friday:type_name -> market_data.DayMarketHours
-	7,  // 13: market_data.MarketHours.saturday:type_name -> market_data.DayMarketHours
-	7,  // 14: market_data.MarketHours.sunday:type_name -> market_data.DayMarketHours
-	15, // 15: market_data.SymbolRefData.status:type_name -> common.SymbolStatus
-	16, // 16: market_data.SymbolRefData.order_time_in_force:type_name -> common.OrderTimeInForce
-	17, // 17: market_data.SymbolRefData.order_types:type_name -> common.OrderType
-	8,  // 18: market_data.SymbolRefData.market_hours:type_name -> market_data.MarketHours
-	9,  // 19: market_data.RefData.symbols:type_name -> market_data.SymbolRefData
-	13, // 20: market_data.RefData.timestamp:type_name -> google.protobuf.Timestamp
-	13, // 21: market_data.Candle.timestamp:type_name -> google.protobuf.Timestamp
-	0,  // 22: market_data.MarketDataService.GetOrderBook:input_type -> market_data.GetSymbol
-	0,  // 23: market_data.MarketDataService.GetTrades:input_type -> market_data.GetSymbol
-	0,  // 24: market_data.MarketDataService.GetUnderlier:input_type -> market_data.GetSymbol
-	0,  // 25: market_data.MarketDataService.GetFundingRate:input_type -> market_data.GetSymbol
-	18, // 26: market_data.MarketDataService.GetRefData:input_type -> common.Empty
-	18, // 27: market_data.MarketDataService.GetBbo:input_type -> common.Empty
-	1,  // 28: market_data.MarketDataService.GetLatestCandle:input_type -> market_data.GetCandle
-	3,  // 29: market_data.MarketDataService.GetOrderBook:output_type -> market_data.OrderBook
-	4,  // 30: market_data.MarketDataService.GetTrades:output_type -> market_data.Trade
-	5,  // 31: market_data.MarketDataService.GetUnderlier:output_type -> market_data.Underlier
-	6,  // 32: market_data.MarketDataService.GetFundingRate:output_type -> market_data.FundingRate
-	10, // 33: market_data.MarketDataService.GetRefData:output_type -> market_data.RefData
-	3,  // 34: market_data.MarketDataService.GetBbo:output_type -> market_data.OrderBook
-	11, // 35: market_data.MarketDataService.GetLatestCandle:output_type -> market_data.Candle
-	29, // [29:36] is the sub-list for method output_type
-	22, // [22:29] is the sub-list for method input_type
-	22, // [22:22] is the sub-list for extension type_name
-	22, // [22:22] is the sub-list for extension extendee
-	0,  // [0:22] is the sub-list for field type_name
+	11, // 4: market_data.Trade.trade_timestamp:type_name -> google.protobuf.Timestamp
+	12, // 5: market_data.Trade.aggressor_side:type_name -> common.OrderDirection
+	11, // 6: market_data.Underlier.timestamp:type_name -> google.protobuf.Timestamp
+	11, // 7: market_data.FundingRate.timestamp:type_name -> google.protobuf.Timestamp
+	13, // 8: market_data.SymbolRefData.status:type_name -> common.SymbolStatus
+	14, // 9: market_data.SymbolRefData.order_time_in_force:type_name -> common.OrderTimeInForce
+	15, // 10: market_data.SymbolRefData.order_types:type_name -> common.OrderType
+	16, // 11: market_data.SymbolRefData.market_hours:type_name -> common.MarketHours
+	7,  // 12: market_data.RefData.symbols:type_name -> market_data.SymbolRefData
+	11, // 13: market_data.RefData.timestamp:type_name -> google.protobuf.Timestamp
+	11, // 14: market_data.Candle.timestamp:type_name -> google.protobuf.Timestamp
+	0,  // 15: market_data.MarketDataService.GetOrderBook:input_type -> market_data.GetSymbol
+	0,  // 16: market_data.MarketDataService.GetTrades:input_type -> market_data.GetSymbol
+	0,  // 17: market_data.MarketDataService.GetUnderlier:input_type -> market_data.GetSymbol
+	0,  // 18: market_data.MarketDataService.GetFundingRate:input_type -> market_data.GetSymbol
+	17, // 19: market_data.MarketDataService.GetRefData:input_type -> common.Empty
+	17, // 20: market_data.MarketDataService.GetBbo:input_type -> common.Empty
+	1,  // 21: market_data.MarketDataService.GetLatestCandle:input_type -> market_data.GetCandle
+	3,  // 22: market_data.MarketDataService.GetOrderBook:output_type -> market_data.OrderBook
+	4,  // 23: market_data.MarketDataService.GetTrades:output_type -> market_data.Trade
+	5,  // 24: market_data.MarketDataService.GetUnderlier:output_type -> market_data.Underlier
+	6,  // 25: market_data.MarketDataService.GetFundingRate:output_type -> market_data.FundingRate
+	8,  // 26: market_data.MarketDataService.GetRefData:output_type -> market_data.RefData
+	3,  // 27: market_data.MarketDataService.GetBbo:output_type -> market_data.OrderBook
+	9,  // 28: market_data.MarketDataService.GetLatestCandle:output_type -> market_data.Candle
+	22, // [22:29] is the sub-list for method output_type
+	15, // [15:22] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_market_data_proto_init() }
@@ -1146,7 +974,7 @@ func file_market_data_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_market_data_proto_rawDesc), len(file_market_data_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
