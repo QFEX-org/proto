@@ -7,7 +7,7 @@
 """
 Add orders
 
-When an order is filled, another response is sent from `trade.psex.io:443` with the filled order details.
+When an order is filled, another response is sent from `trade.qfex.com:443` with the filled order details.
 This is not currently fetched in this script. (We only read 1 response per order placed)
 To effectively fetch these, asynchronously read the responses in a loop separately to sending orders.
 """
@@ -74,7 +74,7 @@ async def run():
     print("Connecting to server...")
     # Create secure channel credentials (defaults are used here)
     creds = grpc.ssl_channel_credentials()
-    async_channel = grpc.aio.secure_channel("trade.psex.io:443", creds)
+    async_channel = grpc.aio.secure_channel("trade.qfex.com:443", creds)
     ###async_channel = grpc.aio.insecure_channel("localhost:50052")
 
     async with async_channel as channel:
