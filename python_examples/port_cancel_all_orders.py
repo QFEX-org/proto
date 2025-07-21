@@ -7,7 +7,7 @@
 """
 Add orders
 
-When an order is filled, another response is sent from `trade.psex.io:50051` with the filled order details.
+When an order is filled, another response is sent from `trade.qfex.com:50051` with the filled order details.
 This is not currently fetched in this script. (We only read 1 response per order placed)
 To effectively fetch these, asynchronously read the responses in a loop separately to sending orders.
 """
